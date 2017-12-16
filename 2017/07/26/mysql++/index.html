@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Sound" />
+
+
+
+<meta name="description" content="Mysql++ 使用记录前言最近因为要使用mysql 的c接口，查了好多资料发现网上关于mysql的c 资料是真的不多。不过还好查到了一个Mysql++这个库，可以方便我更好的进行开发。但是即使这样，其使用难度也比一般的Java和python接口要难得多，因此非常有必要记录一下这几天查到的资料，做一个简单的总结。
+Mysql ++ 连接安装123456# http://tangentsoft.ne">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql++ 使用">
+<meta property="og:url" content="http://yqyao.github.io/2017/07/26/mysql++/index.html">
+<meta property="og:site_name" content="Sound">
+<meta property="og:description" content="Mysql++ 使用记录前言最近因为要使用mysql 的c接口，查了好多资料发现网上关于mysql的c 资料是真的不多。不过还好查到了一个Mysql++这个库，可以方便我更好的进行开发。但是即使这样，其使用难度也比一般的Java和python接口要难得多，因此非常有必要记录一下这几天查到的资料，做一个简单的总结。
+Mysql ++ 连接安装123456# http://tangentsoft.ne">
+<meta property="og:updated_time" content="2017-07-26T12:43:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mysql++ 使用">
+<meta name="twitter:description" content="Mysql++ 使用记录前言最近因为要使用mysql 的c接口，查了好多资料发现网上关于mysql的c 资料是真的不多。不过还好查到了一个Mysql++这个库，可以方便我更好的进行开发。但是即使这样，其使用难度也比一般的Java和python接口要难得多，因此非常有必要记录一下这几天查到的资料，做一个简单的总结。
+Mysql ++ 连接安装123456# http://tangentsoft.ne">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="Sound" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/back.jpg">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Mysql++ 使用 | Sound</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/back.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Sound</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/yongqiang_yao@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/yqyao" title="GitHub"></a>
+                            
+                                <a class="fa 知乎" href="/zhihu" title="知乎"></a>
+                            
+                                <a class="fa 网易云音乐" href="/netease" title="网易云音乐"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cv2/">cv2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cython/">cython</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/libcurl/">libcurl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sersync同步配置/">sersync同步配置</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">爱家人，爱生活</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Sound</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/back.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Sound</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/yongqiang_yao@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/yqyao" title="GitHub"></a>
+                            
+                                <a class="fa 知乎" target="_blank" href="/zhihu" title="知乎"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="/netease" title="网易云音乐"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-mysql++" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/07/26/mysql++/" class="article-date">
+      <time datetime="2017-07-26T12:42:00.000Z" itemprop="datePublished">2017-07-26</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Mysql++ 使用
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/C/">C++</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mysql/">Mysql++</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="Mysql-使用记录"><a href="#Mysql-使用记录" class="headerlink" title="Mysql++ 使用记录"></a>Mysql++ 使用记录</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近因为要使用mysql 的c接口，查了好多资料发现网上关于mysql的c 资料是真的不多。不过还好查到了一个Mysql++这个库，可以方便我更好的进行开发。但是即使这样，其使用难度也比一般的Java和python接口要难得多，因此非常有必要记录一下这几天查到的资料，做一个简单的总结。</p>
+<h2 id="Mysql-连接"><a href="#Mysql-连接" class="headerlink" title="Mysql ++ 连接"></a>Mysql ++ 连接</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># http://tangentsoft.net/mysql++/，从官网下载稳定版本mysql++-3.2.3.tar.gz</span></div><div class="line">tar -zxvf mysql++-3.2.3.tar.gz</div><div class="line"><span class="built_in">cd</span>  mysql++-3.2.3</div><div class="line">./configure --prefix=/your/install/path</div><div class="line">make</div><div class="line">make install</div></pre></td></tr></table></figure>
+<h3 id="原始连接方式"><a href="#原始连接方式" class="headerlink" title="原始连接方式"></a>原始连接方式</h3><p>我们可以采取最原始的连接方式，也比较简单。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">include &lt;mysql++.h&gt;</div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;typeinfo&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> mysqlpp;</div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> DATEBASE_NAME <span class="meta-string">"search"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> DATEBASE_IP <span class="meta-string">"localhost:3306"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> DATEBASE_USERNAME <span class="meta-string">"root"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span> DATEBASE_PWD <span class="meta-string">"DeepLearning"</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="function">Connection <span class="title">conn</span><span class="params">(<span class="literal">false</span>)</span></span>;</div><div class="line">    <span class="keyword">if</span>(conn.connect(DATEBASE_NAME, DATEBASE_IP, DATEBASE_USERNAME, DATEBASE_PWD))</div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"connect success !!!"</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">    Query query = conn.query();</div><div class="line">    <span class="keyword">char</span>* sql = <span class="string">"select * from test"</span>;</div><div class="line">    query &lt;&lt; sql;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="连接池使用"><a href="#连接池使用" class="headerlink" title="连接池使用"></a>连接池使用</h3><blockquote>
+<p>连接池这个概念在数据库使用中常常会用到，对于一般的使用，对于数据库的访问不是太频繁我们可以每次建立连接，使用完就释放连接。但是对于一个复杂的数据库应用，情况就完全不同了，频繁的建立、关闭连接，会极大的减低系统的性能，因为对于连接的使用成了系统性能的瓶颈。连接池的原理是先在内部建立好很多连接，用户使用的时候直接从连接池中获取连接即可，用户使用完再归还连接，但是连接并没有别断开，而是为下一次使用做准备。</p>
+</blockquote>
+<ul>
+<li>mysql++ 内部已经实现好连接池</li>
+</ul>
+<p>mysql++-3.2.3/lib/cpool.cpp 这是源码文件</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">virtual</span> Connection* <span class="title">exchange</span><span class="params">(<span class="keyword">const</span> Connection* pc)</span></span>; <span class="comment">//将当前连接断开重新开启一个连接</span></div><div class="line"><span class="function"><span class="keyword">virtual</span> Connection* <span class="title">grab</span><span class="params">()</span></span>;　　　　　　　　　　　　　　<span class="comment">//从连接池获取一个连接，如果没有创建一个</span></div><div class="line"><span class="function">Connection* <span class="title">safe_grab</span><span class="params">()</span></span>;　　　　　　　　　　　　　　  <span class="comment">//从连接池获取一个可用的连接</span></div><div class="line"><span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">release</span><span class="params">(<span class="keyword">const</span> Connection* pc)</span></span>;　　　　　　<span class="comment">//将一个连接置为未使用状态</span></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">shrink</span><span class="params">()</span>                                       <span class="comment">//从连接池删除未使用的连接</span></span></div><div class="line"><span class="keyword">void</span> <span class="title">remove</span><span class="params">(<span class="keyword">const</span> Connection* pc)</span> <span class="comment">//从连接池中删除指定连接</span></div></pre></td></tr></table></figure>
+<ul>
+<li>继承mysqlpp::ConnectionPool 实现自己的连接池</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">class</span> MysqlConnectPool : <span class="keyword">public</span> mysqlpp::ConnectionPool</div><div class="line">&#123;</div><div class="line"><span class="keyword">public</span>:</div><div class="line">    MysqlConnectPool(<span class="built_in">std</span>::<span class="built_in">string</span> dbname,</div><div class="line">                    <span class="built_in">std</span>::<span class="built_in">string</span> serverip,</div><div class="line">                    <span class="built_in">std</span>::<span class="built_in">string</span> user,</div><div class="line">                    <span class="built_in">std</span>::<span class="built_in">string</span> passwd,</div><div class="line">                    <span class="keyword">int</span> port,</div><div class="line">                    <span class="built_in">std</span>::<span class="built_in">string</span> charset,</div><div class="line">                    <span class="keyword">int</span> max_size)</div><div class="line">        :m_dbname(dbname)</div><div class="line">        ,m_server_ip(serverip)</div><div class="line">        ,m_user(user)</div><div class="line">        ,m_password(passwd)</div><div class="line">        ,m_charset(charset)</div><div class="line">        ,m_port(port)</div><div class="line">    &#123;</div><div class="line">        m_max_size = max_size;</div><div class="line">        conns_in_use_ = <span class="number">0</span>;</div><div class="line">        m_max_idle_time = <span class="number">300</span>;</div><div class="line">    &#125;</div><div class="line">    ······</div><div class="line">    ·····</div><div class="line"><span class="comment">//代码太多，暂时就不贴了。。。https://github.com/yqyao/MyGit/tree/master/mysql_c%2B%2B</span></div><div class="line">这个github有</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="mysql-API调用方式"><a href="#mysql-API调用方式" class="headerlink" title="mysql++ API调用方式"></a>mysql++ API调用方式</h3><ul>
+<li>输入处理</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;memory&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></div><div class="line"><span class="meta"># <span class="meta-keyword">include</span> <span class="meta-string">"unistd.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"MysqlConnectPool.h"</span></span></div><div class="line"></div><div class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;MysqlConnectPool&gt; db_pool = <span class="literal">nullptr</span>;</div><div class="line"><span class="built_in">std</span>::<span class="built_in">string</span> db_name = <span class="string">"search"</span>;</div><div class="line"><span class="built_in">std</span>::<span class="built_in">string</span> db_ip = <span class="string">"localhost"</span>;</div><div class="line"><span class="built_in">std</span>::<span class="built_in">string</span> db_user = <span class="string">"root"</span>;</div><div class="line"><span class="built_in">std</span>::<span class="built_in">string</span> db_passwd = <span class="string">"DeepLearning"</span>;</div><div class="line"><span class="keyword">int</span> db_port = <span class="number">3306</span>;</div><div class="line"><span class="built_in">std</span>::<span class="built_in">string</span> db_charset = <span class="string">"utf8"</span>;</div><div class="line"><span class="keyword">int</span> max_size = <span class="number">10</span>;</div><div class="line"><span class="keyword">int</span> BUFF_SIZE = <span class="number">1024</span>;</div><div class="line"><span class="keyword">char</span> buff[<span class="number">1024</span>];</div><div class="line"><span class="keyword">char</span>* createTableFormat = <span class="string">"create table %s ;"</span>;</div><div class="line"></div><div class="line"><span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">getCreateString</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="built_in">memset</span>(buff, <span class="number">0</span>, BUFF_SIZE);</div><div class="line">    <span class="keyword">char</span>* temp = <span class="string">"Student(id int, name varchar(20), status varchar(10))"</span>;</div><div class="line">    <span class="built_in">snprintf</span>(buff, <span class="keyword">sizeof</span>(buff), createTableFormat, temp);</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> buffAsStdStr = buff;</div><div class="line">    <span class="keyword">return</span> buffAsStdStr;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    db_pool = <span class="built_in">std</span>::make_shared&lt;MysqlConnectPool&gt;(db_name, db_ip, db_user, db_passwd, db_port, db_charset, max_size);</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> createTablesql = getCreateString();</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"createTableFormat: "</span> &lt;&lt; createTablesql &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">    </div><div class="line">    <span class="comment">//out:createTableFormat: create table Student(id int, name varchar(20), status varchar(10))</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>实际执行过程</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">createTable</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">string</span> sql)</span></span></div><div class="line">&#123;</div><div class="line">    mysqlpp::<span class="function">ScopedConnection <span class="title">conn</span><span class="params">(*db_pool, <span class="literal">false</span>)</span></span>;</div><div class="line">    mysqlpp::Query query = conn-&gt;query();</div><div class="line">    query &lt;&lt; sql;</div><div class="line">    mysqlpp::SimpleResult res = query.execute();</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; res.info() &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    db_pool = <span class="built_in">std</span>::make_shared&lt;MysqlConnectPool&gt;(db_name, db_ip, db_user, db_passwd, db_port, db_charset, max_size);</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> createTablesql = getCreateString();</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"createTableFormat: "</span> &lt;&lt; createTablesql &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">    createTablesql(createTablesql);</div><div class="line">    <span class="comment">//out:createTableFormat: create table Student(id int, name varchar(20), status varchar(10))</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>因为select 操作涉及到数据取出，因此需要重点介绍</strong></p>
+<ul>
+<li>search操作</li>
+</ul>
+<p>表结构为上一步介绍create所创建的结构<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">std</span>::<span class="function"><span class="built_in">string</span> <span class="title">getSearchString</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="built_in">memset</span>(buff, <span class="number">0</span>, BUFF_SIZE);</div><div class="line">    <span class="keyword">char</span>* status = <span class="string">"false"</span>;</div><div class="line">    <span class="built_in">snprintf</span>(buff, <span class="keyword">sizeof</span>(buff), searchFormat, status);</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> buffAsStdStr = buff;</div><div class="line">    <span class="keyword">return</span> buffAsStdStr;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">search</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">string</span> sql)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">//this scopedConnection will get the connection and release the connection to the connection pool after ~scopedConnection</span></div><div class="line">    mysqlpp::<span class="function">ScopedConnection <span class="title">conn</span><span class="params">(*db_pool, <span class="literal">false</span>)</span></span>;</div><div class="line">    mysqlpp::Query query = conn-&gt;query();</div><div class="line">    query &lt;&lt; sql;</div><div class="line">    mysqlpp::StoreQueryResult ares = query.store();</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"ares.num_rows() = "</span> &lt;&lt; ares.num_rows() &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; ares.num_rows(); i++)</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"your data"</span> &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"name: "</span> &lt;&lt; ares[i][<span class="string">"name"</span>] &lt;&lt; <span class="string">"\tid: "</span> &lt;&lt; ares[i][<span class="string">"id"</span>] &lt;&lt; <span class="string">"\tstatus: "</span> &lt;&lt; ares[i][<span class="string">"status"</span>] &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    db_pool = <span class="built_in">std</span>::make_shared&lt;MysqlConnectPool&gt;(db_name, db_ip, db_user, db_passwd, db_port, db_charset, max_size);</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> searchSql = getSearchString();</div><div class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"searchFormat: "</span> &lt;&lt; searchSql &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</div><div class="line">    search(searchSql);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><blockquote>
+<p>我们这里的使用的是Mysql++ 官方使用的scopedConnection 类自动获取conn，同时利用析构函数去release conn。我们也可以直接使用原始api去使用这个连接。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    db_pool = <span class="built_in">std</span>::make_shared&lt;MysqlConnectPool&gt;(db_name, db_ip, db_user, db_passwd, db_port, db_charset, max_size);</div><div class="line">    <span class="keyword">const</span> <span class="keyword">char</span>* search = <span class="string">"select * from yyq"</span>;</div><div class="line">    mysqlpp::Connection* conn;</div><div class="line">    conn = db_pool-&gt;grab();</div><div class="line">    db_pool-&gt;release(conn); <span class="comment">//将conn放回连接池</span></div><div class="line">    db_pool-&gt;remove(conn); <span class="comment">//将conn从连接池去除</span></div><div class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; db_pool-&gt;getSize() &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; <span class="comment">//当前连接池连接个数</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这种方式调用连接池的时候需要注意，每次使用完conn连接后需要手动的去release这个连接，不然连接池会重复的建立新连接，达不到我们需要的效果。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/07/30/Jersey/">
+                    Jersey_use
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/07/01/zookeeper/">
+                    zookeeper
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Mysql-使用记录"><span class="toc-number">1.</span> <span class="toc-text">Mysql++ 使用记录</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mysql-连接"><span class="toc-number">1.2.</span> <span class="toc-text">Mysql ++ 连接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装"><span class="toc-number">1.2.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#原始连接方式"><span class="toc-number">1.2.2.</span> <span class="toc-text">原始连接方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#连接池使用"><span class="toc-number">1.2.3.</span> <span class="toc-text">连接池使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mysql-API调用方式"><span class="toc-number">1.2.4.</span> <span class="toc-text">mysql++ API调用方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注意事项"><span class="toc-number">1.2.5.</span> <span class="toc-text">注意事项</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Mysql++ 使用　| Sound　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/07/30/Jersey/" title="上一篇: Jersey_use">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/07/01/zookeeper/" title="下一篇: zookeeper">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/23/dataset2voc/">各种数据集到Voc格式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/09/serialize/">Java Serialization</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/libcurl_use/">libcurl 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/30/zk_use/">zookeeper_use</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/30/Jersey/">Jersey_use</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/26/mysql++/">Mysql++ 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/zookeeper/">zookeeper</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/21/mysql/">mysql</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/21/python-class/">python_class</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/dlfcn/">dlfcn</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/03/git/">Git 使用笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/13/cython-FILE/">cython_FILE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/13/struct/">struct</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/07/rsync/">rsync</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/03/cython-document2/">cython-document2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/03/cython-document1/">cython-document1</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/07/ffmpeg/">ffmpeg 从视频中截取图像帧</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/07/cv2-python/">cv2_python</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/17/supervisord/">supervisord</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/17/cython/">cython 基础详解</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 Sound
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+    <script src="/js/GithubRepoWidget.js"></script>
+
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+             github: ".github-widget a", 
+            
+            
+            
+            
+             articleNav: "#article-nav a, #post-nav-button a", 
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

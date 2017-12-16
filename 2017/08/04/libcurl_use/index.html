@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Sound" />
+
+
+
+<meta name="description" content="c++ httpclient 介绍前言
+由于工程使用的c++，而且需要用到http，在c++中使用较为广泛的是libcurl这个库，在查阅了一部分资料之后在此做个总结。同时这里也查了关于Json的使用方式，使用库为jsoncpp
+
+libcurl介绍
+libcurl是一个跨平台的网络协议库，支持http, https, ftp, gopher, telnet, dict, file, 和ldap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="libcurl 使用">
+<meta property="og:url" content="http://yqyao.github.io/2017/08/04/libcurl_use/index.html">
+<meta property="og:site_name" content="Sound">
+<meta property="og:description" content="c++ httpclient 介绍前言
+由于工程使用的c++，而且需要用到http，在c++中使用较为广泛的是libcurl这个库，在查阅了一部分资料之后在此做个总结。同时这里也查了关于Json的使用方式，使用库为jsoncpp
+
+libcurl介绍
+libcurl是一个跨平台的网络协议库，支持http, https, ftp, gopher, telnet, dict, file, 和ldap">
+<meta property="og:updated_time" content="2017-08-05T12:46:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="libcurl 使用">
+<meta name="twitter:description" content="c++ httpclient 介绍前言
+由于工程使用的c++，而且需要用到http，在c++中使用较为广泛的是libcurl这个库，在查阅了一部分资料之后在此做个总结。同时这里也查了关于Json的使用方式，使用库为jsoncpp
+
+libcurl介绍
+libcurl是一个跨平台的网络协议库，支持http, https, ftp, gopher, telnet, dict, file, 和ldap">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="Sound" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/back.jpg">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>libcurl 使用 | Sound</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/back.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Sound</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/yongqiang_yao@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/yqyao" title="GitHub"></a>
+                            
+                                <a class="fa 知乎" href="/zhihu" title="知乎"></a>
+                            
+                                <a class="fa 网易云音乐" href="/netease" title="网易云音乐"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cv2/">cv2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cython/">cython</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/libcurl/">libcurl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sersync同步配置/">sersync同步配置</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">爱家人，爱生活</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Sound</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/back.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Sound</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/yongqiang_yao@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/yqyao" title="GitHub"></a>
+                            
+                                <a class="fa 知乎" target="_blank" href="/zhihu" title="知乎"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="/netease" title="网易云音乐"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-libcurl_use" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/08/04/libcurl_use/" class="article-date">
+      <time datetime="2017-08-04T00:42:00.000Z" itemprop="datePublished">2017-08-04</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      libcurl 使用
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/C/">C++</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/libcurl/">libcurl</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="c-httpclient-介绍"><a href="#c-httpclient-介绍" class="headerlink" title="c++ httpclient 介绍"></a>c++ httpclient 介绍</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>由于工程使用的c++，而且需要用到http，在c++中使用较为广泛的是libcurl这个库，在查阅了一部分资料之后在此做个总结。同时这里也查了关于Json的使用方式，使用库为jsoncpp</p>
+</blockquote>
+<h2 id="libcurl介绍"><a href="#libcurl介绍" class="headerlink" title="libcurl介绍"></a>libcurl介绍</h2><blockquote>
+<p>libcurl是一个跨平台的网络协议库，支持http, https, ftp, gopher, telnet, dict, file, 和ldap 协议。libcurl同样支持HTTPS证书授权，HTTP POST, HTTP PUT, FTP 上传, HTTP基本表单上传，代理，cookies,和用户认证。官网地址 <a href="http://curl.haxx.se/" target="_blank" rel="external">http://curl.haxx.se/</a></p>
+</blockquote>
+<h2 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">wget http://curl.haxx.se/download/curl-7.54.1.tar.gz</div><div class="line">tar -zxvf curl-7.54.1.tar.gz</div><div class="line"><span class="built_in">cd</span> curl-7.54.1</div><div class="line">./configure --prefix=/your/path</div><div class="line">make</div><div class="line">make install</div></pre></td></tr></table></figure>
+<h2 id="基本函数说明"><a href="#基本函数说明" class="headerlink" title="基本函数说明"></a>基本函数说明</h2><h3 id="CURLcode-curl-global-init-long-flags"><a href="#CURLcode-curl-global-init-long-flags" class="headerlink" title="CURLcode curl_global_init(long flags)"></a>CURLcode curl_global_init(long flags)</h3><ul>
+<li>基本概念</li>
+</ul>
+<blockquote>
+<p>这个函数只能用一次。(其实在调用curl_global_cleanup 函数后仍然可再用)如果这个函数在curl_easy_init调用时还没被调用，它将由libcurl库自动调用，为了避免一些不必要的问题，建议主动调该函数，以防止多次调用。同时需要注意的是curl_global_init是不能保证线程安全的。</p>
+</blockquote>
+<ul>
+<li>主要参数(flag)<ul>
+<li>CURL_GLOBAL_ALL  //初始化所有的可能的调用</li>
+<li>CURL_GLOBAL_SSL  //初始化支持 安全套接字层。</li>
+<li>CURL_GLOBAL_WIN32 //初始化win32套接字库</li>
+<li>CURL_GLOBAL_NOTHING  //没有额外的初始化。</li>
+</ul>
+</li>
+</ul>
+<h3 id="void-curl-global-cleanup-void"><a href="#void-curl-global-cleanup-void" class="headerlink" title="void curl_global_cleanup(void)"></a>void curl_global_cleanup(void)</h3><blockquote>
+<p>描述：在结束libcurl使用的时候，用来对curl_global_init做的工作清理。类似于close的函数。<br>注意：虽然libcurl是线程安全的，但curl_global_cleanup是不能保证线程安全的，所以不要在每个线程中都调用curl_global_init，应该将该函数的调用放在主线程中。</p>
+</blockquote>
+<h3 id="CURL-curl-easy-init"><a href="#CURL-curl-easy-init" class="headerlink" title="CURL *curl_easy_init( );"></a>CURL *curl_easy_init( );</h3><blockquote>
+<p>curl_easy_init用来初始化一个CURL的指针(有些像返回FILE类型的指针一样). 相应的在调用结束时要用curl_easy_cleanup函数清理.<br>一般curl_easy_init意味着一个会话的开始. 它会返回一个easy_handle(CURL*对象), 一般都用在easy系列的函数中.</p>
+</blockquote>
+<h3 id="void-curl-easy-cleanup-CURL-handle"><a href="#void-curl-easy-cleanup-CURL-handle" class="headerlink" title="void curl_easy_cleanup(CURL *handle);"></a>void curl_easy_cleanup(CURL *handle);</h3><blockquote>
+<p>配合curl_easy_init() 使用，用于结束一个会话</p>
+</blockquote>
+<h3 id="CURLcode-curl-easy-setopt-CURL-handle-CURLoption-option-parameter"><a href="#CURLcode-curl-easy-setopt-CURL-handle-CURLoption-option-parameter" class="headerlink" title="CURLcode curl_easy_setopt(CURL *handle, CURLoption option, parameter);"></a>CURLcode curl_easy_setopt(CURL *handle, CURLoption option, parameter);</h3><blockquote>
+<p>这个函数最重要了.几乎所有的curl 程序都要频繁的使用它.它告诉curl库.程序将有如何的行为.</p>
+</blockquote>
+<ul>
+<li>参数<ul>
+<li>CURL类型的指针</li>
+<li>CURLoption类型的选项( 后续会有介绍)</li>
+<li>parameter，具体什么类型取决于第二个参数类型</li>
+</ul>
+</li>
+</ul>
+<h3 id="CURLcode-curl-easy-perform-CURL-handle"><a href="#CURLcode-curl-easy-perform-CURL-handle" class="headerlink" title="CURLcode curl_easy_perform(CURL *handle)"></a>CURLcode curl_easy_perform(CURL *handle)</h3><blockquote>
+<p>实际运行函数，返回值表示是否成功，0表示成功其他都表示失败</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="curl-easy-setopt-函数介绍"><a href="#curl-easy-setopt-函数介绍" class="headerlink" title="curl_easy_setopt 函数介绍"></a>curl_easy_setopt 函数介绍</h2><ul>
+<li>CURLOPT_URL</li>
+</ul>
+<blockquote>
+<p>设置访问的URL</p>
+</blockquote>
+<ul>
+<li>CURLOPT_WRITEFUNCTION，CURLOPT_WRITEDATA</li>
+</ul>
+<blockquote>
+<p>回调函数原型为size_t function( void <em>ptr, size_t size, size_t nmemb, void </em>stream)；函数将在libcurl接收到数据后被调用，因此函数多做数据保存的功能，我们可以设置保存数据到自己定义的结构体，也可以保存到文件当中。CURLOPT_WRITEDATA 用于表明CURLOPT_WRITEFUNCTION函数中的stream指针的来源。如果没有设置CURLOPT_WRITEFUNCTION回调函数，默认的回调函数是将输出打印到标准输出。</p>
+</blockquote>
+<ul>
+<li>CURLOPT_HEADERFUNCTION，CURLOPT_HEADERDATA</li>
+</ul>
+<blockquote>
+<p>同上面的一样,不过设置是Header数据</p>
+</blockquote>
+<ul>
+<li>CURLOPT_READFUNCTION CURLOPT_READDATA</li>
+</ul>
+<blockquote>
+<p>libCurl需要读取数据传递给远程主机时将调用CURLOPT_READFUNCTION指定的函数，函数原型是：size_t function(void <em>ptr, size_t size, size_t nmemb,void </em>stream). CURLOPT_READDATA 表明CURLOPT_READFUNCTION函数原型中的stream指针来源</p>
+</blockquote>
+<ul>
+<li>CURLOPT_TIMEOUT，CURLOPT_CONNECTIONTIMEOUT</li>
+</ul>
+<blockquote>
+<p>CURLOPT_TIMEOUT 由于设置传输时间，CURLOPT_CONNECTIONTIMEOUT 设置连接等待时间</p>
+</blockquote>
+<ul>
+<li>CURLOPT_FOLLOWLOCATION</li>
+</ul>
+<blockquote>
+<p>设置重定位URL</p>
+</blockquote>
+<h3 id="curl-easy-perform-函数说明"><a href="#curl-easy-perform-函数说明" class="headerlink" title="curl_easy_perform 函数说明"></a>curl_easy_perform 函数说明</h3><p>0 表示一切ok, 非0代表错误发生</p>
+<ul>
+<li>CURLE_OK  –任务完成</li>
+<li>CURLE_UNSUPPORTED_PROTOCOL –不支持的协议</li>
+<li>CURLE_COULDNT_CONNECT  –无法连接remote主机</li>
+<li>CURLE_REMOTE_ACCESS_DENIED –访问被拒绝</li>
+<li>CURLE_HTTP_RETURNED_ERROR –http返回错误</li>
+<li>CURLE_READ_ERROR –读本地文件错误</li>
+</ul>
+<h3 id="HTTP消息头设置"><a href="#HTTP消息头设置" class="headerlink" title="HTTP消息头设置"></a>HTTP消息头设置</h3><ul>
+<li>基本概念</li>
+</ul>
+<blockquote>
+<p>当使用libcurl发送http请求时，它会自动添加一些http头。我们可以通过CURLOPT_HTTPHEADER属性手动替换、添加或删除相应 的HTTP消息头.</p>
+</blockquote>
+<ul>
+<li>基本设置</li>
+</ul>
+<blockquote>
+<p>以POST的方式向HTTP服务器提交请求时，libcurl会设置该消息头为”100-continue”，它要求服务器在正式处理该请求之前，返回一 个”OK”消息。如果POST的数据很小，libcurl可能不会设置该消息头。</p>
+</blockquote>
+<ul>
+<li>自定义请求方式</li>
+</ul>
+<blockquote>
+<p>HTTP支持GET, HEAD或者POST提交请求。可以设置CURLOPT_CUSTOMREQUEST来设置自定义的请求方式，libcurl默认以GET方式提交请求：<br>比如我们想用PUT请求<br>curl_easy_setopt(easy_handle, CURLOPT_CUSTOMREQUEST, “PUT”); </p>
+</blockquote>
+<ul>
+<li>如何添加删除消息头</li>
+</ul>
+<blockquote>
+<p>后面程序会有介绍</p>
+</blockquote>
+<h3 id="获取http应答头信息"><a href="#获取http应答头信息" class="headerlink" title="获取http应答头信息"></a>获取http应答头信息</h3><ul>
+<li>基本概念</li>
+</ul>
+<blockquote>
+<p>发出http请求后，服务器会返回应答头信息和应答数据，如果仅仅是打印应答头的所有内容，则直接可以通过curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, 打印函数)的方式来完成，这里需要获取的是应答头中特定的信息，比如应答码、cookies列表等，则需要通过下面这个函数: CURLcode curl_easy_getinfo(CURL *curl, CURLINFO info, … )</p>
+</blockquote>
+<ul>
+<li>参数<ul>
+<li>CURLINFO_RESPONSE_COD –获取应答码</li>
+<li>CURLINFO_HEADER_SIZE –头大小</li>
+<li>CURLINFO_COOKIELIST –cookies列表</li>
+<li>其他根据需要查看官方文档</li>
+</ul>
+</li>
+</ul>
+<h3 id="密码登陆"><a href="#密码登陆" class="headerlink" title="密码登陆"></a>密码登陆</h3><ul>
+<li>支持URL直接指定用户名和密码的协议</li>
+</ul>
+<blockquote>
+<p>curl_easy_setopt(easy_handle, CURLOPT_USERPWD, “user_name:password”);</p>
+</blockquote>
+<ul>
+<li>访问代理服务器</li>
+</ul>
+<blockquote>
+<p>curl_easy_setopt(easy_handle, CURLOPT_PROXYUSERPWD, “user_name:password”)</p>
+</blockquote>
+<ul>
+<li>FTP 访问</li>
+</ul>
+<blockquote>
+<p>curl_easy_setopt(easy_handle, CURLOPT_NETRC, 1L);<br>从&amp;HOME/.netrc 文件中获取用户名和密码</p>
+</blockquote>
+<ul>
+<li>SSL访问</li>
+</ul>
+<blockquote>
+<p>curl_easy_setopt(easy_handle, CURLOPT_KEYPASSWD, “keypassword”);<br>通过这个来设置私钥</p>
+</blockquote>
+<h3 id="HTTP验证"><a href="#HTTP验证" class="headerlink" title="HTTP验证"></a>HTTP验证</h3><ul>
+<li>基本概念</li>
+</ul>
+<blockquote>
+<p>在使用HTTP协议时，客户端有很多种方式向服务器提供验证信息。默认的 HTTP验证方法是”Basic”，它将用户名与密码以明文的方式、经Base64编码后保存在HTTP请求头中，发往服务器。当然这不太安全.</p>
+</blockquote>
+<ul>
+<li>libcurl 支持验证方式</li>
+</ul>
+<blockquote>
+<p>basic, Digest, NTLM, Negotiate, GSS-Negotiate and SPNEGO(具体可以查找资料)。用户可以通过CURLOPT_HTTPAUTH属性来设置具体的验证方式。</p>
+</blockquote>
+<ul>
+<li>直接发给服务器</li>
+</ul>
+<blockquote>
+<p>curl_easy_setopt(easy_handle, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);</p>
+</blockquote>
+<ul>
+<li>发给代理服务器</li>
+</ul>
+<blockquote>
+<p>curl_easy_setopt(easy_handle, CURLOPT_PROXYAUTH, CURLAUTH_NTLM);</p>
+</blockquote>
+<h3 id="多线程线程安全"><a href="#多线程线程安全" class="headerlink" title="多线程线程安全"></a>多线程线程安全</h3><ul>
+<li>基本概念</li>
+</ul>
+<blockquote>
+<p>绝对不应该在线程之间共享同一个libcurl handle(CURL *对象)，不管是easy handle还是multi handle。一个线程每次只能使用一个handle.</p>
+</blockquote>
+<ul>
+<li>多线程设置</li>
+</ul>
+<blockquote>
+<p>CURLcode curl_easy_setopt(CURL *handle, CURLOPT_NOSIGNAL, long onoff);多线程使用中，为了线程安全一般设置onoff为1</p>
+</blockquote>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><p>官方示例代码</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span>  </span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;curl/curl.h&gt;</span>  </span></div><div class="line"><span class="function"><span class="keyword">bool</span> <span class="title">getUrl</span><span class="params">(<span class="keyword">char</span> *filename)</span>  </span></div><div class="line">&#123;  </div><div class="line">    CURL *curl;  </div><div class="line">    CURLcode res;  </div><div class="line">    FILE *fp;  </div><div class="line">    <span class="keyword">if</span> ((fp = fopen(filename, <span class="string">"w"</span>)) == <span class="literal">NULL</span>)  <span class="comment">// 返回结果用文件存储  </span></div><div class="line">        <span class="keyword">return</span> <span class="literal">false</span>;  </div><div class="line">    <span class="keyword">struct</span> curl_slist *headers = <span class="literal">NULL</span>;  </div><div class="line">    headers = curl_slist_append(headers, <span class="string">"Accept: Agent-007"</span>);  </div><div class="line">    curl = curl_easy_init();    <span class="comment">// 初始化  </span></div><div class="line">    <span class="keyword">if</span> (curl)  </div><div class="line">    &#123;  </div><div class="line">        <span class="comment">//curl_easy_setopt(curl, CURLOPT_PROXY, "10.99.60.201:8080");// 代理  </span></div><div class="line">        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);<span class="comment">// 改协议头  </span></div><div class="line">        curl_easy_setopt(curl, CURLOPT_URL,<span class="string">"http://www.baidu.com"</span>);  </div><div class="line">        curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp); <span class="comment">//将返回的http头输出到fp指向的文件  </span></div><div class="line">        curl_easy_setopt(curl, CURLOPT_HEADERDATA, fp); <span class="comment">//将返回的html主体数据输出到fp指向的文件  </span></div><div class="line">        res = curl_easy_perform(curl);   <span class="comment">// 执行  </span></div><div class="line">        <span class="keyword">if</span> (res != <span class="number">0</span>) &#123;  </div><div class="line">  </div><div class="line">            curl_slist_free_all(headers);  </div><div class="line">            curl_easy_cleanup(curl);  </div><div class="line">        &#125;  </div><div class="line">        fclose(fp);  </div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;  </div><div class="line">    &#125;  </div><div class="line">&#125; </div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span>  </span></div><div class="line">&#123;  </div><div class="line">    getUrl(<span class="string">"get.html"</span>);  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Json使用"><a href="#Json使用" class="headerlink" title="Json使用"></a>Json使用</h2><h3 id="jsoncpp-安装"><a href="#jsoncpp-安装" class="headerlink" title="jsoncpp 安装"></a>jsoncpp 安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">clone</span> https://github.com/open-source-parsers/jsoncpp<span class="comment">#generating-amalgamated-source-and-header</span></div><div class="line"></div><div class="line"><span class="built_in">cd</span> jsoncpp</div><div class="line">cmake .</div><div class="line">make </div><div class="line">make install</div></pre></td></tr></table></figure>
+<p><em>注意</em><br>根据官网的介绍，还要运行下面的程序更新一些必要文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python amalgamate.py</div></pre></td></tr></table></figure>
+<p><em>生成文件</em></p>
+<ul>
+<li>dist/jsoncpp.cpp –此文件需要加入到你的project当中</li>
+<li>dist/json/json.h –相关头文件</li>
+<li>dist/json/json-forwards.h </li>
+</ul>
+<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h3><h4 id="json对象生成"><a href="#json对象生成" class="headerlink" title="json对象生成"></a>json对象生成</h4><ul>
+<li>第一种方式</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Json::Value root;</div><div class="line">root[<span class="string">"name"</span>] = <span class="string">"yyq"</span>;</div><div class="line">root[<span class="string">"id"</span>] = <span class="number">3</span>;</div><div class="line"><span class="built_in">string</span> json = root.toStyledString(); <span class="comment">//生成字符串</span></div></pre></td></tr></table></figure>
+<ul>
+<li>第二种方式</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Json::Value root;</div><div class="line">root[<span class="string">"name"</span>].append(<span class="string">"yao"</span>);</div><div class="line">root[<span class="string">"name"</span>].append(<span class="string">"li"</span>); <span class="comment">//name 对应则是一个list</span></div><div class="line">root[<span class="string">"id"</span>] = <span class="number">3</span>;</div><div class="line"><span class="built_in">string</span> json = root.toStyledString(); <span class="comment">//生成字符串</span></div></pre></td></tr></table></figure>
+<ul>
+<li>第三种方式</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Json::Value root;  </div><div class="line">  </div><div class="line">root[<span class="string">"id"</span>] = <span class="number">1</span>;  </div><div class="line">root[<span class="string">"data"</span>][<span class="string">"name"</span>] = <span class="string">"wu"</span>;  </div><div class="line">root[<span class="string">"data"</span>][<span class="string">"age"</span>] = <span class="number">26</span>;  </div><div class="line"><span class="built_in">std</span>::<span class="built_in">string</span> json = root.toStyledString();</div></pre></td></tr></table></figure>
+<h4 id="json文件写入"><a href="#json文件写入" class="headerlink" title="json文件写入"></a>json文件写入</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">Json::Value root;</div><div class="line">Json::Reader reader;</div><div class="line">Json::FastWriter fwriter; <span class="comment">//FastWriter就是无格式的写入</span></div><div class="line">Json::StyledWriter swriter; <span class="comment">//而StyledWriter就是带有格式的写入</span></div><div class="line"></div><div class="line"><span class="keyword">if</span>(! reader.parse(<span class="string">"example.json"</span>, root))&#123;</div><div class="line"><span class="comment">// parse fail</span></div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="built_in">std</span>::<span class="built_in">string</span> str = fwriter(root);</div><div class="line"><span class="built_in">std</span>::<span class="function">ofstream <span class="title">ofs</span><span class="params">(<span class="string">"example_fast_writer.json"</span>)</span></span>;</div><div class="line">ofs &lt;&lt; str;</div><div class="line">ofs.close();</div><div class="line"></div><div class="line">str = swriter(root);</div><div class="line">ofs.open(<span class="string">"example_styled_writer.json"</span>);</div><div class="line">ofs &lt;&lt; str;</div><div class="line">ofs.close();</div></pre></td></tr></table></figure>
+<h4 id="json格式解析字符串"><a href="#json格式解析字符串" class="headerlink" title="json格式解析字符串"></a>json格式解析字符串</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">string</span> json = <span class="string">"&#123;\"id\" : 1, \"data\" : &#123; \"name\" : \"wu\",  \"age\" : 26 &#125; &#125;"</span>;  </div><div class="line">  </div><div class="line">Json::Reader reader;    </div><div class="line">Json::Value root;    </div><div class="line"><span class="built_in">std</span>::<span class="built_in">string</span> name;  </div><div class="line"><span class="keyword">int</span> id = <span class="number">0</span>;  </div><div class="line"><span class="keyword">int</span> age = <span class="number">0</span>;  </div><div class="line"><span class="keyword">if</span> (reader.parse(json, root))  <span class="comment">// reader将Json字符串解析到root，root将包含Json里所有子元素     </span></div><div class="line">&#123;    </div><div class="line">    id = root[<span class="string">"id"</span>].asInt();  </div><div class="line">    name = root[<span class="string">"data"</span>][<span class="string">"name"</span>].asString();  </div><div class="line">    age = root[<span class="string">"data"</span>][<span class="string">"age"</span>].asInt();  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="json格式解析文件"><a href="#json格式解析文件" class="headerlink" title="json格式解析文件"></a>json格式解析文件</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">Json::Value root;</div><div class="line">Json::Reader reader;</div><div class="line"><span class="function">ifstream <span class="title">ifs</span><span class="params">(<span class="string">"example.json"</span>)</span></span>;<span class="comment">//open file example.json</span></div><div class="line"></div><div class="line"><span class="keyword">if</span>(!reader.parse(ifs, root))&#123;</div><div class="line">   <span class="comment">// fail to parse</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">else</span>&#123;</div><div class="line">   <span class="comment">// success</span></div><div class="line">   <span class="built_in">cout</span> &lt;&lt; root[<span class="string">"encoding"</span>].asString() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">   <span class="built_in">cout</span> &lt;&lt; root[<span class="string">"indent"</span>][<span class="string">"length"</span>].asInt() &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h4><ul>
+<li>判断key是否存在</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">bool</span> Json::Value::isMember ( <span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;  key) <span class="keyword">const</span></div><div class="line"><span class="keyword">bool</span> Json::Value::isMember ( <span class="keyword">const</span> <span class="keyword">char</span>* key, <span class="keyword">const</span> <span class="keyword">char</span> * end ) <span class="keyword">const</span></div><div class="line">Json::Value root;</div><div class="line"><span class="keyword">bool</span> exist = root.isMember(<span class="string">"name"</span>)</div></pre></td></tr></table></figure>
+<ul>
+<li>判断值是否为Null</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">bool</span> Json::Value::isNull() <span class="keyword">const</span></div><div class="line">Json::Value root;</div><div class="line"><span class="keyword">bool</span> isnull = root[<span class="string">"name"</span>].isNull()</div></pre></td></tr></table></figure>
+<ul>
+<li>得到所有的key</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Value::Members Json::Value::getMemberNames ( ) <span class="keyword">const</span></div><div class="line">Return a <span class="built_in">list</span> of the member names</div></pre></td></tr></table></figure>
+<ul>
+<li>删除成员</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Value Json::Value::removeMember( <span class="keyword">const</span> <span class="keyword">char</span>* key)   </div><div class="line"></div><div class="line">Remove and <span class="keyword">return</span> the named member.</div><div class="line">Do nothing <span class="keyword">if</span> it did not exist.</div><div class="line"></div><div class="line">Returns</div><div class="line">    the removed Value, or null.</div></pre></td></tr></table></figure>
+<h3 id="libcurl发送Json数据"><a href="#libcurl发送Json数据" class="headerlink" title="libcurl发送Json数据"></a>libcurl发送Json数据</h3><p><em>完整代码</em><br><a href="https://github.com/yqyao/MyGit/tree/master/libcurl" target="_blank" rel="external">github代码</a></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span>  </span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;curl/curl.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dist/json/json.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dist/json/json-forwards.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dist/jsoncpp.cpp&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;typeinfo&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">postUrlJson</span><span class="params">(<span class="keyword">const</span> <span class="built_in">string</span> url, <span class="keyword">const</span> <span class="built_in">string</span> &amp; postStr, <span class="built_in">string</span> &amp;response)</span></span></div><div class="line">&#123;</div><div class="line">    CURL *curl;</div><div class="line">    CURLcode res;</div><div class="line">    <span class="keyword">struct</span> curl_slist *headers = <span class="literal">NULL</span>;  </div><div class="line">    headers = curl_slist_append(headers, <span class="string">"Accept: */*"</span>);</div><div class="line">    headers = curl_slist_append(headers, <span class="string">"Host: localhost"</span>); </div><div class="line">    headers = curl_slist_append(headers, <span class="string">"Content-Type: application/json"</span>);  <span class="comment">//</span></div><div class="line">    <span class="comment">// headers = curl_slist_append(headers, "Host:") remove the headers of host </span></div><div class="line">    curl = curl_easy_init();    <span class="comment">// 初始化 </span></div><div class="line">    <span class="keyword">if</span> (curl)  </div><div class="line">    &#123;  </div><div class="line">        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postStr.c_str());    <span class="comment">// 指定post内容  </span></div><div class="line">        <span class="comment">//curl_easy_setopt(curl, CURLOPT_PROXY, "10.99.60.201:8080");  </span></div><div class="line">        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());   <span class="comment">// 指定url  </span></div><div class="line">        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, OnWriteData);</div><div class="line">        curl_easy_setopt(curl, CURLOPT_WRITEDATA, (<span class="keyword">void</span>*)&amp;response);</div><div class="line">        <span class="comment">// curl_easy_setopt(curl, CURLOPT_HEADERDATA, fp);  </span></div><div class="line">        res = curl_easy_perform(curl);</div><div class="line">        <span class="keyword">if</span> (res != <span class="number">0</span>) &#123;  </div><div class="line">            curl_slist_free_all(headers);  </div><div class="line">            curl_easy_cleanup(curl);</div><div class="line">            <span class="keyword">return</span> <span class="number">-1</span>;  </div><div class="line">        &#125;</div><div class="line">        stringToJson(response);  </div><div class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"post json response:\t"</span> &lt;&lt; response &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>; </div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="number">-1</span>;  </div><div class="line">&#125;</div><div class="line"></div><div class="line">Json::<span class="function">Value <span class="title">stringToJson</span><span class="params">(<span class="built_in">string</span> str)</span></span></div><div class="line">&#123;</div><div class="line">    Json::Reader reader;</div><div class="line">    Json::Value root;</div><div class="line">    <span class="keyword">if</span> (reader.parse(str, root)) &#123;</div><div class="line">    <span class="keyword">if</span> (!root[<span class="string">"name"</span>].isNull()) &#123;</div><div class="line">        <span class="built_in">string</span> strValue= root[<span class="string">"name"</span>].asString(); </div><div class="line">        <span class="built_in">cout</span> &lt;&lt; strValue &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="built_in">string</span> <span class="title">postJsonStr</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">//从server端返回的json数据</span></div><div class="line">    Json::Value root;    </div><div class="line">    root[<span class="string">"post_json"</span>] = <span class="string">"json"</span>;  </div><div class="line">    root[<span class="string">"post_id"</span>] = <span class="number">3</span>;  </div><div class="line">    <span class="keyword">return</span> root.toStyledString();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="built_in">string</span> post_json_url = <span class="string">"http://localhost:8089/post_json"</span>;</div><div class="line">    <span class="built_in">string</span> post_json_rep;</div><div class="line">    httpclient-&gt;postUrlJson(post_json_url, postJsonStr(), post_json_rep);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/09/09/serialize/">
+                    Java Serialization
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/07/30/zk_use/">
+                    zookeeper_use
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#c-httpclient-介绍"><span class="toc-number">1.</span> <span class="toc-text">c++ httpclient 介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libcurl介绍"><span class="toc-number">1.2.</span> <span class="toc-text">libcurl介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#下载安装"><span class="toc-number">1.3.</span> <span class="toc-text">下载安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#基本函数说明"><span class="toc-number">1.4.</span> <span class="toc-text">基本函数说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CURLcode-curl-global-init-long-flags"><span class="toc-number">1.4.1.</span> <span class="toc-text">CURLcode curl_global_init(long flags)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#void-curl-global-cleanup-void"><span class="toc-number">1.4.2.</span> <span class="toc-text">void curl_global_cleanup(void)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CURL-curl-easy-init"><span class="toc-number">1.4.3.</span> <span class="toc-text">CURL *curl_easy_init( );</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#void-curl-easy-cleanup-CURL-handle"><span class="toc-number">1.4.4.</span> <span class="toc-text">void curl_easy_cleanup(CURL *handle);</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CURLcode-curl-easy-setopt-CURL-handle-CURLoption-option-parameter"><span class="toc-number">1.4.5.</span> <span class="toc-text">CURLcode curl_easy_setopt(CURL *handle, CURLoption option, parameter);</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CURLcode-curl-easy-perform-CURL-handle"><span class="toc-number">1.4.6.</span> <span class="toc-text">CURLcode curl_easy_perform(CURL *handle)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#curl-easy-setopt-函数介绍"><span class="toc-number">1.5.</span> <span class="toc-text">curl_easy_setopt 函数介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#curl-easy-perform-函数说明"><span class="toc-number">1.5.1.</span> <span class="toc-text">curl_easy_perform 函数说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP消息头设置"><span class="toc-number">1.5.2.</span> <span class="toc-text">HTTP消息头设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取http应答头信息"><span class="toc-number">1.5.3.</span> <span class="toc-text">获取http应答头信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#密码登陆"><span class="toc-number">1.5.4.</span> <span class="toc-text">密码登陆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP验证"><span class="toc-number">1.5.5.</span> <span class="toc-text">HTTP验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多线程线程安全"><span class="toc-number">1.5.6.</span> <span class="toc-text">多线程线程安全</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#示例代码"><span class="toc-number">1.5.7.</span> <span class="toc-text">示例代码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Json使用"><span class="toc-number">1.6.</span> <span class="toc-text">Json使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#jsoncpp-安装"><span class="toc-number">1.6.1.</span> <span class="toc-text">jsoncpp 安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用方式"><span class="toc-number">1.6.2.</span> <span class="toc-text">使用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#json对象生成"><span class="toc-number">1.6.2.1.</span> <span class="toc-text">json对象生成</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#json文件写入"><span class="toc-number">1.6.2.2.</span> <span class="toc-text">json文件写入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#json格式解析字符串"><span class="toc-number">1.6.2.3.</span> <span class="toc-text">json格式解析字符串</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#json格式解析文件"><span class="toc-number">1.6.2.4.</span> <span class="toc-text">json格式解析文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#其他操作"><span class="toc-number">1.6.2.5.</span> <span class="toc-text">其他操作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#libcurl发送Json数据"><span class="toc-number">1.6.3.</span> <span class="toc-text">libcurl发送Json数据</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"libcurl 使用　| Sound　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/09/09/serialize/" title="上一篇: Java Serialization">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/07/30/zk_use/" title="下一篇: zookeeper_use">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/23/dataset2voc/">各种数据集到Voc格式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/09/serialize/">Java Serialization</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/libcurl_use/">libcurl 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/30/zk_use/">zookeeper_use</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/30/Jersey/">Jersey_use</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/26/mysql++/">Mysql++ 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/zookeeper/">zookeeper</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/21/mysql/">mysql</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/21/python-class/">python_class</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/dlfcn/">dlfcn</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/03/git/">Git 使用笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/13/cython-FILE/">cython_FILE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/13/struct/">struct</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/07/rsync/">rsync</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/03/cython-document2/">cython-document2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/03/cython-document1/">cython-document1</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/07/ffmpeg/">ffmpeg 从视频中截取图像帧</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/07/cv2-python/">cv2_python</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/17/supervisord/">supervisord</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/17/cython/">cython 基础详解</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 Sound
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+    <script src="/js/GithubRepoWidget.js"></script>
+
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+             github: ".github-widget a", 
+            
+            
+            
+            
+             articleNav: "#article-nav a, #post-nav-button a", 
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

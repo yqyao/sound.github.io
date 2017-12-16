@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Sound" />
+
+
+
+<meta name="description" content="Zookeeper学习
+基本概念
+数据节点
+
+zk数据模型中的最小数据单元，数据模型是一棵树，由斜杠（/）分割的路径名唯一标识，数据节点可以存储数据内容及一系列属性信息，同时还可以挂载子节点，构成一个层次化的命名空间，相比Unix的文件节点，zk中的数据节点既是目录也是文件。
+
+
+会话
+
+指zk客户端与zk服务器之间的会话，在zk中，会话是通过客户端和服务器之间的一个TCP长连接来实现的。通过这个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="zookeeper">
+<meta property="og:url" content="http://yqyao.github.io/2017/07/01/zookeeper/index.html">
+<meta property="og:site_name" content="Sound">
+<meta property="og:description" content="Zookeeper学习
+基本概念
+数据节点
+
+zk数据模型中的最小数据单元，数据模型是一棵树，由斜杠（/）分割的路径名唯一标识，数据节点可以存储数据内容及一系列属性信息，同时还可以挂载子节点，构成一个层次化的命名空间，相比Unix的文件节点，zk中的数据节点既是目录也是文件。
+
+
+会话
+
+指zk客户端与zk服务器之间的会话，在zk中，会话是通过客户端和服务器之间的一个TCP长连接来实现的。通过这个">
+<meta property="og:updated_time" content="2017-07-01T03:19:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="zookeeper">
+<meta name="twitter:description" content="Zookeeper学习
+基本概念
+数据节点
+
+zk数据模型中的最小数据单元，数据模型是一棵树，由斜杠（/）分割的路径名唯一标识，数据节点可以存储数据内容及一系列属性信息，同时还可以挂载子节点，构成一个层次化的命名空间，相比Unix的文件节点，zk中的数据节点既是目录也是文件。
+
+
+会话
+
+指zk客户端与zk服务器之间的会话，在zk中，会话是通过客户端和服务器之间的一个TCP长连接来实现的。通过这个">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="Sound" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/back.jpg">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>zookeeper | Sound</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/back.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Sound</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/yongqiang_yao@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/yqyao" title="GitHub"></a>
+                            
+                                <a class="fa 知乎" href="/zhihu" title="知乎"></a>
+                            
+                                <a class="fa 网易云音乐" href="/netease" title="网易云音乐"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cv2/">cv2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cython/">cython</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/libcurl/">libcurl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sersync同步配置/">sersync同步配置</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">爱家人，爱生活</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Sound</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/back.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Sound</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/yongqiang_yao@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/yqyao" title="GitHub"></a>
+                            
+                                <a class="fa 知乎" target="_blank" href="/zhihu" title="知乎"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="/netease" title="网易云音乐"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-zookeeper" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/07/01/zookeeper/" class="article-date">
+      <time datetime="2017-07-01T03:13:17.000Z" itemprop="datePublished">2017-07-01</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      zookeeper
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/个人学习/">个人学习</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="Zookeeper学习"><a href="#Zookeeper学习" class="headerlink" title="Zookeeper学习"></a>Zookeeper学习</h1><hr>
+<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><ul>
+<li><p>数据节点</p>
+<blockquote>
+<p>zk数据模型中的最小数据单元，数据模型是一棵树，由斜杠（/）分割的路径名唯一标识，数据节点可以存储数据内容及一系列属性信息，同时还可以挂载子节点，构成一个层次化的命名空间，相比Unix的文件节点，zk中的数据节点既是目录也是文件。</p>
+</blockquote>
+</li>
+<li><p>会话</p>
+<blockquote>
+<p>指zk客户端与zk服务器之间的会话，在zk中，会话是通过客户端和服务器之间的一个TCP长连接来实现的。通过这个长连接，客户端能够使用心跳检测与服务器保持有效的会话，也能向服务器发送请求并接收响应，还可接收服务器的Watcher事件通知。Session的sessionTimeout，是会话超时时间，如果这段时间内，客户端未与服务器发生任何沟通（心跳或请求），服务器端会清除该session数据，客户端的TCP长连接将不可用，这种情况下，客户端需要重新实例化一个Zookeeper对象</p>
+</blockquote>
+</li>
+<li><p>事务</p>
+<blockquote>
+<p>事务是指能够改变Zookeeper服务器状态的操作，一般包括数据节点的创建与删除、数据节点内容更新和客户端会话创建与失效等操作。对于每个事务请求，zk都会为其分配一个全局唯一的事务ID，即ZXID，是一个64位的数字，高32位表示该事务发生的集群选举周期（集群每发生一次leader选举，值加1），低32位表示该事务在当前选择周期内的递增次序（leader每处理一个事务请求，值加1，发生一次leader选择，低32位要清0）</p>
+</blockquote>
+</li>
+<li><p>事务日志</p>
+<blockquote>
+<p>所有事务操作都是需要记录到日志文件中的，可通过dataLogDir配置文件目录，文件是以写入的第一条事务zxid为后缀，方便后续的定位查找。zk会采取“磁盘空间预分配”的策略，来避免磁盘Seek频率，提升zk服务器对事务请求的影响能力。默认设置下，每次事务日志写入操作都会实时刷入磁盘，也可以设置成非实时（写到内存文件流，定时批量写入磁盘），但那样断电时会带来丢失数据的风险</p>
+</blockquote>
+</li>
+<li><p>数据快照</p>
+<blockquote>
+<p>数据快照是zk数据存储中另一个非常核心的运行机制。数据快照用来记录zk服务器上某一时刻的全量内存数据内容，并将其写入到指定的磁盘文件中，可通过dataDir配置文件目录。可配置参数snapCount，设置两次快照之间的事务操作个数，zk节点记录完事务日志时，会统计判断是否需要做数据快照（距离上次快照，事务操作次数等于snapCount/2~snapCount 中的某个值时，会触发快照生成操作，随机值是为了避免所有节点同时生成快照，导致集群影响缓慢）</p>
+</blockquote>
+</li>
+<li><p>过半</p>
+<blockquote>
+<p>所谓“过半”是指大于集群机器数量的一半，即大于或等于（n/2+1），此处的“集群机器数量”不包括observer角色节点。leader广播一个事务消息后，当收到半数以上的ack信息时，就认为集群中所有节点都收到了消息，然后leader就不需要再等待剩余节点的ack，直接广播commit消息，提交事务。选举中的投票提议及数据同步时，也是如此，leader不需要等到所有learner节点的反馈，只要收到过半的反馈就可进行下一步操作</p>
+</blockquote>
+</li>
+</ul>
+<a id="more"></a>
+<h1 id="Zookeeper分布式特性"><a href="#Zookeeper分布式特性" class="headerlink" title="Zookeeper分布式特性"></a>Zookeeper分布式特性</h1><ul>
+<li>顺序一致性<blockquote>
+<p>从同一个客户端发起的事务请求，最终将会严格按照其发起顺序被应用到ZooKeeper中</p>
+</blockquote>
+</li>
+<li><p>原子性</p>
+<blockquote>
+<p>所有事务请求的结果在集群中所有机器上的应用情况是一致的，也就是说要么整个集群所有集群都成功应用了某一个事务，要么都没有应用，一定不会出现集群中部分机器应用了该事务，而另外一部分没有应用的情况</p>
+</blockquote>
+</li>
+<li><p>单一视图</p>
+<blockquote>
+<p>无论客户端连接的是哪个ZooKeeper服务器，其看到的服务端数据模型都是一致的</p>
+</blockquote>
+</li>
+<li><p>可靠性</p>
+<blockquote>
+<p>一旦服务端成功地应用了一个事务，并完成对客户端的响应，那么该事务所引起的服务端状态变更将会被一直保留下来，除非有另一个事务又对其进行了变更</p>
+</blockquote>
+</li>
+<li><p>实时性</p>
+<blockquote>
+<p>通常人们看到实时性的第一反应是，一旦一个事务被成功应用，那么客户端能够立即从服务端上读取到这个事务变更后的最新数据状态。这里需要注意的是，ZooKeeper仅仅保证在一定的时间段内，客户端最终一定能够从服务端上读取到最新的数据状态，如果需要保证每次得到最新的状态，需要调sync接口保证.</p>
+</blockquote>
+</li>
+</ul>
+<h1 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h1><h2 id="基本状态"><a href="#基本状态" class="headerlink" title="基本状态"></a>基本状态</h2><ul>
+<li><p>四种状态</p>
+<ul>
+<li>LOOKING : 当前Server不知道leader是谁，正在搜寻</li>
+<li>LEADING : 当前Server即为选举出来的leader</li>
+<li>OBSERVING : 观察着，与Follower功能类似，但不参与选举</li>
+<li>FOLLOWING : leader已经选举出来，当前Server与之同步</li>
+</ul>
+</li>
+<li><p>注意<br>LOOKING只在集群刚启动时没有Leader时会出现，一般不出现。在一般的情况下只有三种角色：Leader，Follower，Observer。一个zk集群同一时刻只会有一个Leader。zk默认为只有Leader，Follower角色，如果需要使用Observer角色，需要在任何想采用Observer的节点的配置文件加上peerType=observer,并同时在所有的server的配置文件中配置类似server.1:localhost:2888:3888:observer这种模式。Leader的机器是通过Leader选举的过程选举出来，该Leader服务器为客户端提供着读写服务。Follower和Observer都能提供读服务，但是不提供写服务。Observer不参与Leader的选举过程，也不参与写操作(过半写成功)的策略，因此这个可以在不影响写性能的情况下提升集群的读性能</p>
+</li>
+</ul>
+<h2 id="zk文件系统"><a href="#zk文件系统" class="headerlink" title="zk文件系统"></a>zk文件系统</h2><h3 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h3><p>每个子目录项如 NameService都被称作为znode，和文件系统一样，我们能够自由的增加、删除znode，在一个znode下增加、删除子znode，唯一的不同在于znode是可以存储数据的。</p>
+<h3 id="znode类型"><a href="#znode类型" class="headerlink" title="znode类型"></a>znode类型</h3><ul>
+<li>PERSISTENT 持久化目录节点<br>  客户端与zookeeper断开连接后，该节点依旧存在</li>
+<li>PERSISTENT_SEQUENTIAL 持久化顺序编号目录节点<br>  客户端与zookeeper断开连接后，该节点依旧存在，只是Zookeeper给该节点名称进行顺序编号</li>
+<li>EPHEMERAL 临时目录节点<br>  客户端与zookeeper断开连接后，该节点被删除</li>
+<li>EPHEMERAL_SEQUENTIAL 临时顺序编号目录节点<br>  客户端与zookeeper断开连接后，该节点被删除，只是Zookeeper给该节点名称进行顺序编号</li>
+</ul>
+<h3 id="分布式协调"><a href="#分布式协调" class="headerlink" title="分布式协调"></a>分布式协调</h3><p>ZooKeeper中特有Watcher注册与异步通知机制，能够很好的实现分布式环境下不同机器，甚至不同系统之间的通知与协调，从而实现对数据变更的实时处理。使用方法通常是不同的客户端都对ZK上同一个ZNode进行注册，监听ZNode的变化（包括ZNode本身内容及子节点的），如果ZNode发生了变化，那么所有订阅的客户端都能够接收到相应的Watcher通知，并做出相应的处理</p>
+<h2 id="集群架构"><a href="#集群架构" class="headerlink" title="集群架构"></a>集群架构</h2><h3 id="架构组成"><a href="#架构组成" class="headerlink" title="架构组成"></a>架构组成</h3><p>zk集群由多个节点组成，其中有且仅有一个leader，处理所有事务请求；follower及observer统称learner。learner需要同步leader的数据。follower还参与选举及事务决策过程。zk客户端会打散配置文件中的serverAddress 顺序并随机组成新的list，然后循环按序取一个服务器地址进行连接，直到成功。follower及observer会将事务请求转交给leader处理。</p>
+<h3 id="集群规模"><a href="#集群规模" class="headerlink" title="集群规模"></a>集群规模</h3><p>要搭建一个高可用的zk集群，我们首先需要确定好集群规模。一般我们将节点（指leader及follower节点，不包括observer节点）个数设置为 2*n+1 ，n为可容忍宕机的个数。 zk使用“过半”设计原则，很好地解决了单点问题，提升了集群容灾能力。但是zk的集群伸缩不是很灵活，集群中所有机器ip及port都是事先配置在每个服务的zoo.cfg文件里的。如果要往集群增加一个follower节点，首先需要更改所有机器的zoo.cfg，然后逐个重启。</p>
+<h3 id="集群工作流程"><a href="#集群工作流程" class="headerlink" title="集群工作流程"></a>集群工作流程</h3><ul>
+<li>加载配置文件zoo.cfg</li>
+<li>初始化核心类</li>
+<li>加载本地快照以及事务日志，恢复内存数据</li>
+<li>选举leader</li>
+<li>数据同步，leader与learner之间同步</li>
+<li>过半原则完成数据同步ACK(当leader收到过半的learner完成数据同步的ACK，集群开始正常工作)</li>
+</ul>
+<h2 id="ZAB协议"><a href="#ZAB协议" class="headerlink" title="ZAB协议"></a>ZAB协议</h2><h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><blockquote>
+<p>ZooKeeper是Chubby的开源实现，而Chubby是Paxos的工程实现，所以很多人以为ZooKeeper也是Paxos算法的工程实现。事实上，ZooKeeper并没有完全采用Paxos算法，而是使用了一种称为ZooKeeper Atomic Broadcast（ZAB，ZooKeeper原子广播协议）的协议作为其数据一致性的核心算法</p>
+</blockquote>
+<h3 id="算法要点"><a href="#算法要点" class="headerlink" title="算法要点"></a>算法要点</h3><blockquote>
+<p>ZooKeeper使用了一个单一的主进程（Leader）来接收并处理客户端的所有事务请求，并采用ZAB的原子广播协议，将服务器数据的状态变更以事务Proposal的形式广播到所有的副本进程上去（Follower）。ZAB协议的这个主备模型架构保证了同一时刻集群中只能有一个主进程来广播服务器的状态变更，因此能够很好地处理客户端大量的并发请求。另一方面，考虑到分布式环境中，顺序执行的一些状态变更其前后会存在一定的依赖关系，有些状态变更必须依赖于比它早生成的那些状态变更，例如变更C需要依赖变更A和变更B。这样的依赖关系也对ZAB协议提出了一个要求：ZAB协议必须能够保证一个全局的变更序列被顺序应用。也就是说，ZAB协议需要保证如果一个状态变更已经被处理了，那么所有依赖的状态变更都应该已经被提前处理掉了。最后，考虑到主进程在任何时候都有可能出现崩溃退出或重启现象，因此，ZAB协议还需要做到在当前主进程出现上述异常情况的时候，依然能够正常工作.</p>
+</blockquote>
+<h3 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h3><blockquote>
+<p>所有事务请求必须由一个全局唯一的服务器来协调处理，这样的服务器被称为Leader服务器，而剩下的其他服务器则成为Follower服务器。Leader服务器负责将一个客户端事务请求转换成一个事务Proposal（提案）并将该Proposal分发给集群中所有的Follower服务器。之后Leader服务器需要等待所有Follower服务器的反馈，一旦超过半数的Follower服务器进行了正确的反馈后，Leader就会再次向所有的Follower服务器分发Commit消息，要求对刚才的Proposal进行提交</p>
+</blockquote>
+<h3 id="具体内容"><a href="#具体内容" class="headerlink" title="具体内容"></a>具体内容</h3><p><strong>两种基本模式</strong> </p>
+<ul>
+<li><p>崩溃恢复</p>
+<blockquote>
+<p>在整个ZooKeeper集群启动过程中，或是当Leader服务器出现网络中断、崩溃退出与重启等异常情况时，ZAB协议就会进入恢复模式并选举产生新的Leader服务器。当选举产生了新的Leader服务器，同时集群中有过半的机器与该Leader服务器完成了状态同步之后，ZAB协议就会退出恢复模式.状态同步是指数据同步，用来保证集群中存在过半的机器能够和Leader服务器的数据状态保持一致.</p>
+</blockquote>
+</li>
+<li><p>消息广播</p>
+<blockquote>
+<p>ZAB协议的消息广播过程使用原子广播协议，类似于一个二阶段提交过程，针对客户端的事务请求，Leader服务器会为其生成对应的事务Proposal，并将其发送给集群中其余所有的机器，然后再分别收集各自的选票，最后进行事务提交。集群中过半的Follower服务器完成了和Leader服务器的状态同步，整个集群就可以进入消息广播。</p>
+</blockquote>
+</li>
+<li><p>消息广播具体实现</p>
+<blockquote>
+<p>在消息广播过程中，Leader服务器会为每一个Follower服务器都各自分配一个单独的队列，然后将需要广播的事务Proposal依次放入这些队列中去，并且根据FIFO策略进行消息发送。每一个Follower服务器在接收到这个事务Proposal之后，都会首先将其以事务日志的形式写入到本地磁盘中去，并且在成功写入后反馈给Leader服务器一个Ack响应。当Leader服务器接收到超过半数Follower的Ack响应后，就会广播一个Commit消息给所有的Follower服务器以通知其进行事务提交，同时Leader自身也会完成对事务的提交，而每一个Follower服务器在接收到Commit消息后，也会完成对事务的提交.</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="基本特性"><a href="#基本特性" class="headerlink" title="基本特性"></a>基本特性</h3><blockquote>
+<p>ZAB协议规定了如果一个事务Proposal在一台机器上被处理成功，那么应该在所有的机器上都被处理成功，哪怕机器出现故障崩溃。ZAB协议需要确保那些已经在Leader服务器上提交的事务最终被所有服务器都提交，假设一个事务在Leader服务器上被提交了，并且已经得到了过半Follower服务器的Ack反馈，但是在它Commit消息发送给所有Follower机器之前，Leader服务挂了.ZAB协议需要确保丢弃那些只在Leader服务器上被提出的事务.因此Leader选举算法中必须能够确保提交已经被Leader提交的事务的Proposal，同时丢弃已经被跳过的事务Proposal。如果让Leader选举算法能够保证新选举出来的Leader服务器拥有集群中所有机器最高编号（ZXID最大）的事务Proposal，那么就可以保证这个新选举出来的Leader一定具有所有已经提交的提议，更为重要的是如果让具有最高编号事务的Proposal机器称为Leader，就可以省去Leader服务器查询Proposal的提交和丢弃工作这一步骤了。</p>
+</blockquote>
+<h2 id="Leader选举过程"><a href="#Leader选举过程" class="headerlink" title="Leader选举过程"></a>Leader选举过程</h2><h3 id="发生时机"><a href="#发生时机" class="headerlink" title="发生时机"></a>发生时机</h3><ul>
+<li>服务器初始化启动</li>
+<li>服务器运行期间无法与leader保持连接</li>
+</ul>
+<h3 id="投票依据信息"><a href="#投票依据信息" class="headerlink" title="投票依据信息"></a>投票依据信息</h3><ul>
+<li>id<br>集群中每个zk节点启动前配置的全局唯一的id，记录在myid中</li>
+<li>zxid<br>被推举的leader的事务id，此id越大表示事务状态越新。</li>
+</ul>
+<h3 id="执行过程"><a href="#执行过程" class="headerlink" title="执行过程"></a>执行过程</h3><ul>
+<li>第一步<br>设置状态为LOOKING，初始化内部投票（id，zxid）到内存中，并将其广播到集群的其他节点。首次投票选举自己为leader，然后将自身的id，处理的最近一个事务请求zxid以及当然状态广播出去。最后进入循环等待和处理其他节点的投票信息的流程中。</li>
+<li>第二步<br>循环等待，节点每收到一个外部的Vote信息，需要将其与自己内存中Vote数据进行PK，规则为取ZXID最大，如果ZXID相等，则去ID大的那个投票。如果外部投票获胜，节点需要将选票覆盖之前的内存Vote数据，同时再广播出去。同时还需要统计是否有过半的赞同者与新的内存投票数据一致，无则需要继续等待新的投票，有则需要判断leader是否在赞同者之中，在则退出循环，选举结束，根据选举结果以及各自角色切换状态。</li>
+</ul>
+<h3 id="选举完成后数据同步"><a href="#选举完成后数据同步" class="headerlink" title="选举完成后数据同步"></a>选举完成后数据同步</h3><h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><blockquote>
+<p>选主算法中的zxid是从内存数据库中取的最新事务id，事务操作是分两阶段的（提出阶段和提交阶段），leader生成提议并广播给followers，收到半数以上的ACK后，再广播commit消息，同时将事务操作应用到内存中。follower收到提议后先将事务写到本地事务日志，然后反馈ACK，等接到leader的commit消息时，才会将事务操作应用到内存中。可见，选主只是选出了内存数据是最新的节点，仅仅靠这个是无法保证已经在leader服务器上提交的事务最终被所有服务器都提交.</p>
+</blockquote>
+<h4 id="具体流程"><a href="#具体流程" class="headerlink" title="具体流程"></a>具体流程</h4><ul>
+<li>加载快照<blockquote>
+<p>重新加载本地磁盘上的数据快照至内存，并从日志文件中取出快照之后的所有事务操作，逐条应用至内存，并添加到已提交事务缓存commitedProposals。这样能保证日志文件中的事务操作，必定会应用到leader的内存数据库中</p>
+</blockquote>
+</li>
+<li><p>事务同步</p>
+<blockquote>
+<p>获取learner发送的FOLLOWERINFO/OBSERVERINFO信息，并与自身commitedProposals比对，确定采用哪种同步方式，不同的learner可能采用不同同步方式（DIFF同步、TRUNC+DIFF同步、SNAP同步）。这里是拿learner内存中的zxid与leader内存中的commitedProposals（min、max）比对，如果zxid介于min与max之间，但又不存在于commitedProposals中时，说明该zxid对应的事务需要TRUNC回滚；如果zxid介于min与max之间且存在于commitedProposals中，则leader需要将zxid+1~max间所有事务同步给learner，这些内存缺失数据，很可能是因为leader切换过程中造成commit消息丢失，learner只完成了事务日志写入，未完成提交事务，未应用到内存.</p>
+</blockquote>
+</li>
+<li><p>数据同步</p>
+<blockquote>
+<p>leader主动向所有learner发送同步数据消息，每个learner有自己的发送队列，互不干扰。同步结束时，leader会向learner发送NEWLEADER指令，同时learner会反馈一个ACK。当leader接收到来自learner的ACK消息后，就认为当前learner已经完成了数据同步，同时进入“过半策略”等待阶段。当leader统计到收到了一半已上的ACK时，会向所有已经完成数据同步的learner发送一个UPTODATE指令，用来通知learner集群已经完成了数据同步，可以对外服务了</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="实际应用"><a href="#实际应用" class="headerlink" title="实际应用"></a>实际应用</h2><h3 id="Zookeeper配置管理"><a href="#Zookeeper配置管理" class="headerlink" title="Zookeeper配置管理"></a>Zookeeper配置管理</h3><blockquote>
+<p>leader主动向所有learner发送同步数据消息，每个learner有自己的发送队列，互不干扰。同步结束时，leader会向learner发送NEWLEADER指令，同时learner会反馈一个ACK。当leader接收到来自learner的ACK消息后，就认为当前learner已经完成了数据同步，同时进入“过半策略”等待阶段。当leader统计到收到了一半已上的ACK时，会向所有已经完成数据同步的learner发送一个UPTODATE指令，用来通知learner集群已经完成了数据同步，可以对外服务了</p>
+</blockquote>
+<h3 id="Zookeeper-集群管理"><a href="#Zookeeper-集群管理" class="headerlink" title="Zookeeper 集群管理"></a>Zookeeper 集群管理</h3><blockquote>
+<p>这个是用场景就更加广泛了，Hadoop中的master选举就是采用zookeeper。集群管理一般涉及到2点，机器的加入和退出，选举master。<br>    对于机器的加入和退出，所有机器约定在Groupmembers创建一个临时目录节点。然后可以监听父目录节点的子节点的变化消息，一旦有机器宕机，此机器与zookeeper的连接会断开，其创建的临时目录节点会被删除。对于新机器加入，会建立与zookeeper的连接，然后回在groupmembers创建一个临时目录节点，同时所有机器都会被通知有新机器加入。<br>    对于选举master，一种简单的方式就是所有机器创建临时顺序编号目录节点，这样所有机器对应就是编号关系，我们可以每次选取最小的机器作为master即可</p>
+</blockquote>
+<h3 id="Zookeeper-分布式锁"><a href="#Zookeeper-分布式锁" class="headerlink" title="Zookeeper 分布式锁"></a>Zookeeper 分布式锁</h3><blockquote>
+<p>通过对Zookeeper的原理进行分析，我们可以知道Zookeeper具有一致性文件系统的特性，可以利用这个特点实现分布式锁。我们创建两种类型的分布式锁，一种为保持独占的锁，另一种是控制时序的锁。保持独占的锁，可以通过Zookeeper创建节点的特性来实现。我们可以将zookeeper文件系统的每一个节点目录作为一把锁。所有的机器会去创建/distribute_lock节点，根据zookeeper的特性，只有一个机器会创建成功，这个成功创建的那个客户端也就获得这把锁。使用完成后只需删除这一临时目录节点即可。<br>    第二类针对的是/distribute_lock已经存在。所有客户端会在它下面创建临时顺序编号目录节点，我们可以指定编号最小的获得锁，用完即删除临时节点</p>
+</blockquote>
+
+      
+    </div>
+    
+  </div>
+  
+    
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/07/26/mysql++/">
+                    Mysql++ 使用
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/03/21/mysql/">
+                    mysql
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Zookeeper学习"><span class="toc-number">1.</span> <span class="toc-text">Zookeeper学习</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基本概念"><span class="toc-number">2.</span> <span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Zookeeper分布式特性"><span class="toc-number">3.</span> <span class="toc-text">Zookeeper分布式特性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#工作原理"><span class="toc-number">4.</span> <span class="toc-text">工作原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#基本状态"><span class="toc-number">4.1.</span> <span class="toc-text">基本状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#zk文件系统"><span class="toc-number">4.2.</span> <span class="toc-text">zk文件系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#特性"><span class="toc-number">4.2.1.</span> <span class="toc-text">特性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#znode类型"><span class="toc-number">4.2.2.</span> <span class="toc-text">znode类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分布式协调"><span class="toc-number">4.2.3.</span> <span class="toc-text">分布式协调</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#集群架构"><span class="toc-number">4.3.</span> <span class="toc-text">集群架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#架构组成"><span class="toc-number">4.3.1.</span> <span class="toc-text">架构组成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#集群规模"><span class="toc-number">4.3.2.</span> <span class="toc-text">集群规模</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#集群工作流程"><span class="toc-number">4.3.3.</span> <span class="toc-text">集群工作流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ZAB协议"><span class="toc-number">4.4.</span> <span class="toc-text">ZAB协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#概览"><span class="toc-number">4.4.1.</span> <span class="toc-text">概览</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#算法要点"><span class="toc-number">4.4.2.</span> <span class="toc-text">算法要点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#核心"><span class="toc-number">4.4.3.</span> <span class="toc-text">核心</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#具体内容"><span class="toc-number">4.4.4.</span> <span class="toc-text">具体内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基本特性"><span class="toc-number">4.4.5.</span> <span class="toc-text">基本特性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Leader选举过程"><span class="toc-number">4.5.</span> <span class="toc-text">Leader选举过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#发生时机"><span class="toc-number">4.5.1.</span> <span class="toc-text">发生时机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#投票依据信息"><span class="toc-number">4.5.2.</span> <span class="toc-text">投票依据信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行过程"><span class="toc-number">4.5.3.</span> <span class="toc-text">执行过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#选举完成后数据同步"><span class="toc-number">4.5.4.</span> <span class="toc-text">选举完成后数据同步</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#概述"><span class="toc-number">4.5.4.1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#具体流程"><span class="toc-number">4.5.4.2.</span> <span class="toc-text">具体流程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实际应用"><span class="toc-number">4.6.</span> <span class="toc-text">实际应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Zookeeper配置管理"><span class="toc-number">4.6.1.</span> <span class="toc-text">Zookeeper配置管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Zookeeper-集群管理"><span class="toc-number">4.6.2.</span> <span class="toc-text">Zookeeper 集群管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Zookeeper-分布式锁"><span class="toc-number">4.6.3.</span> <span class="toc-text">Zookeeper 分布式锁</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"zookeeper　| Sound　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/07/26/mysql++/" title="上一篇: Mysql++ 使用">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/03/21/mysql/" title="下一篇: mysql">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/23/dataset2voc/">各种数据集到Voc格式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/09/serialize/">Java Serialization</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/libcurl_use/">libcurl 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/30/zk_use/">zookeeper_use</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/30/Jersey/">Jersey_use</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/26/mysql++/">Mysql++ 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/zookeeper/">zookeeper</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/21/mysql/">mysql</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/21/python-class/">python_class</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/dlfcn/">dlfcn</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/03/git/">Git 使用笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/13/cython-FILE/">cython_FILE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/13/struct/">struct</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/07/rsync/">rsync</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/03/cython-document2/">cython-document2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/03/cython-document1/">cython-document1</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/07/ffmpeg/">ffmpeg 从视频中截取图像帧</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/07/cv2-python/">cv2_python</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/17/supervisord/">supervisord</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/17/cython/">cython 基础详解</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 Sound
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+    <script src="/js/GithubRepoWidget.js"></script>
+
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+             github: ".github-widget a", 
+            
+            
+            
+            
+             articleNav: "#article-nav a, #post-nav-button a", 
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

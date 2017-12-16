@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Sound" />
+
+
+
+<meta name="description" content="Python struct 用法主要函数
+pack(fmt, v1, v2, …)根据所给的fmt描述的格式将值v1，v2，…转换为一个字符串
+unpack(fmt, bytes)根据所给的fmt描述的格式将bytes反向解析出来，返回一个元组
+calcsize(fmt)根据所给的fmt描述的格式返回该结构的大小
+
+主要定义格式
+i – int
+f – float
+d double
+s strin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="struct">
+<meta property="og:url" content="http://yqyao.github.io/2017/02/13/struct/index.html">
+<meta property="og:site_name" content="Sound">
+<meta property="og:description" content="Python struct 用法主要函数
+pack(fmt, v1, v2, …)根据所给的fmt描述的格式将值v1，v2，…转换为一个字符串
+unpack(fmt, bytes)根据所给的fmt描述的格式将bytes反向解析出来，返回一个元组
+calcsize(fmt)根据所给的fmt描述的格式返回该结构的大小
+
+主要定义格式
+i – int
+f – float
+d double
+s strin">
+<meta property="og:updated_time" content="2017-02-13T14:34:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="struct">
+<meta name="twitter:description" content="Python struct 用法主要函数
+pack(fmt, v1, v2, …)根据所给的fmt描述的格式将值v1，v2，…转换为一个字符串
+unpack(fmt, bytes)根据所给的fmt描述的格式将bytes反向解析出来，返回一个元组
+calcsize(fmt)根据所给的fmt描述的格式返回该结构的大小
+
+主要定义格式
+i – int
+f – float
+d double
+s strin">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="Sound" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/back.jpg">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>struct | Sound</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/back.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Sound</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/yongqiang_yao@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/yqyao" title="GitHub"></a>
+                            
+                                <a class="fa 知乎" href="/zhihu" title="知乎"></a>
+                            
+                                <a class="fa 网易云音乐" href="/netease" title="网易云音乐"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cv2/">cv2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cython/">cython</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/libcurl/">libcurl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sersync同步配置/">sersync同步配置</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">爱家人，爱生活</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Sound</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/back.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Sound</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/yongqiang_yao@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/yqyao" title="GitHub"></a>
+                            
+                                <a class="fa 知乎" target="_blank" href="/zhihu" title="知乎"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="/netease" title="网易云音乐"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-struct" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/02/13/struct/" class="article-date">
+      <time datetime="2017-02-13T05:07:26.000Z" itemprop="datePublished">2017-02-13</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      struct
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/python-学习/">python 学习</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="Python-struct-用法"><a href="#Python-struct-用法" class="headerlink" title="Python struct 用法"></a>Python struct 用法</h2><h3 id="主要函数"><a href="#主要函数" class="headerlink" title="主要函数"></a>主要函数</h3><ul>
+<li>pack(fmt, v1, v2, …)<br>根据所给的fmt描述的格式将值v1，v2，…转换为一个字符串</li>
+<li>unpack(fmt, bytes)<br>根据所给的fmt描述的格式将bytes反向解析出来，返回一个元组</li>
+<li>calcsize(fmt)<br>根据所给的fmt描述的格式返回该结构的大小</li>
+</ul>
+<h3 id="主要定义格式"><a href="#主要定义格式" class="headerlink" title="主要定义格式"></a>主要定义格式</h3><ul>
+<li>i – int</li>
+<li>f – float</li>
+<li>d double</li>
+<li>s string</li>
+<li>其他可看官方文档<a id="more"></a>
+</li>
+</ul>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><ul>
+<li><p>pack</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">feature = [<span class="number">1.0</span>,<span class="number">2.0</span>,<span class="number">3.0</span>]</div><div class="line">buf = struct.pack(<span class="string">'%if'</span> % len(feature), *feature)</div></pre></td></tr></table></figure>
+</li>
+<li><p>加上文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">length = <span class="number">3</span></div><div class="line"><span class="keyword">with</span> open(<span class="string">'test.txt'</span>,<span class="string">'wb'</span>) <span class="keyword">as</span> fw:</div><div class="line">     string = <span class="string">''</span></div><div class="line">     string += struct.pack(<span class="string">"i"</span>, length)</div><div class="line">     fw.write(string)</div></pre></td></tr></table></figure>
+</li>
+<li><p>unpack</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">feature_lenght = <span class="number">10</span></div><div class="line"> <span class="keyword">with</span> open(<span class="string">'test.txt'</span>, <span class="string">'rb'</span>) <span class="keyword">as</span> f:</div><div class="line">     feature_tuple = struct.unpack(<span class="string">'%if'</span> %feature_length, f.read())</div></pre></td></tr></table></figure>
+</li>
+<li><p>calcsize</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">struct.calcsize(<span class="string">'ii'</span>) <span class="comment">#返回8</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="struct-处理结构体"><a href="#struct-处理结构体" class="headerlink" title="struct 处理结构体"></a>struct 处理结构体</h3><ul>
+<li><p>需要处理的结构体</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">struct</span> header</div><div class="line">&#123;</div><div class="line"><span class="keyword">unsigned</span> <span class="keyword">short</span>  usType;</div><div class="line"><span class="keyword">char</span>[<span class="number">4</span>]         acTag;</div><div class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span>    uiVersion;</div><div class="line"><span class="keyword">unsigned</span> <span class="keyword">int</span>    uiLength;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+<li><p>python 解析此struct</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">str = struct.pack(<span class="string">'B4sII'</span>, <span class="number">0x04</span>, <span class="string">'aaaa'</span>, <span class="number">0x01</span>, <span class="number">0x0e</span>)</div></pre></td></tr></table></figure>
+</li>
+<li><p>unpack 此结构体</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">type, tag, version, length = struct.unpack(<span class="string">'B4sll'</span>, str)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="常用序列化工具"><a href="#常用序列化工具" class="headerlink" title="常用序列化工具"></a>常用序列化工具</h3><h4 id="cPickle"><a href="#cPickle" class="headerlink" title="cPickle"></a>cPickle</h4><ul>
+<li><p>dump函数用法 (处理文件)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">test_list = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>]</div><div class="line"><span class="keyword">with</span> open(<span class="string">'test.txt'</span>, <span class="string">'wb'</span>) <span class="keyword">as</span> f:</div><div class="line">    cPickle.dump(test_list, f)</div></pre></td></tr></table></figure>
+</li>
+<li><p>load 函数用法(处理文件)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">with</span> open(<span class="string">'test.txt'</span>, <span class="string">'rb'</span>) <span class="keyword">as</span> f：</div><div class="line">    test_list = cPickle.load(f)</div><div class="line">    <span class="keyword">print</span> test_list</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>]</div></pre></td></tr></table></figure>
+</li>
+<li><p>dumps 函数用法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">test_list = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</div><div class="line">obj = cPickle.dumps(test_list)</div><div class="line"><span class="keyword">print</span> type(obj)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>&lt;type <span class="string">'str'</span>&gt;</div><div class="line">obj 以python专用的形式存储</div></pre></td></tr></table></figure>
+</li>
+<li><p>loads 函数用法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">load_obj = cPickle.loads(obj)</div><div class="line"><span class="keyword">print</span> load_obj</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="json-格式"><a href="#json-格式" class="headerlink" title="json 格式"></a>json 格式</h4><ul>
+<li><p>dump函数用法 (处理文件)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">test_list = [<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>]</div><div class="line"><span class="keyword">with</span> open(<span class="string">'test.txt'</span>, <span class="string">'wb'</span>) <span class="keyword">as</span> f:</div><div class="line">    json.dump(test_list, f)</div></pre></td></tr></table></figure>
+</li>
+<li><p>load 函数用法(处理文件)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">with</span> open(<span class="string">'test.txt'</span>, <span class="string">'rb'</span>) <span class="keyword">as</span> f：</div><div class="line">    test_list = json.load(f)</div><div class="line">    <span class="keyword">print</span> test_list</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="string">u'a'</span>, <span class="string">u'b'</span>, <span class="string">u'c'</span>]</div></pre></td></tr></table></figure>
+</li>
+<li><p>dumps 函数用法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">test_list = [<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</div><div class="line">obj = json.dumps(test_list)</div><div class="line"><span class="keyword">print</span> type(obj)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>&lt;type <span class="string">'str'</span>&gt;</div><div class="line">obj 以python专用的形式存储</div></pre></td></tr></table></figure>
+</li>
+<li><p>loads 函数用法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">load_obj = json.loads(obj)</div><div class="line"><span class="keyword">print</span> load_obj</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="string">u'a'</span>, <span class="string">u'b'</span>, <span class="string">u'c'</span>]</div></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/02/13/cython-FILE/">
+                    cython_FILE
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/02/07/rsync/">
+                    rsync
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Python-struct-用法"><span class="toc-number">1.</span> <span class="toc-text">Python struct 用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#主要函数"><span class="toc-number">1.1.</span> <span class="toc-text">主要函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#主要定义格式"><span class="toc-number">1.2.</span> <span class="toc-text">主要定义格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#实例"><span class="toc-number">1.3.</span> <span class="toc-text">实例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#struct-处理结构体"><span class="toc-number">1.4.</span> <span class="toc-text">struct 处理结构体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常用序列化工具"><span class="toc-number">1.5.</span> <span class="toc-text">常用序列化工具</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#cPickle"><span class="toc-number">1.5.1.</span> <span class="toc-text">cPickle</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#json-格式"><span class="toc-number">1.5.2.</span> <span class="toc-text">json 格式</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"struct　| Sound　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/02/13/cython-FILE/" title="上一篇: cython_FILE">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/02/07/rsync/" title="下一篇: rsync">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/23/dataset2voc/">各种数据集到Voc格式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/09/serialize/">Java Serialization</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/libcurl_use/">libcurl 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/30/zk_use/">zookeeper_use</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/30/Jersey/">Jersey_use</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/26/mysql++/">Mysql++ 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/zookeeper/">zookeeper</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/21/mysql/">mysql</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/21/python-class/">python_class</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/dlfcn/">dlfcn</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/03/git/">Git 使用笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/13/cython-FILE/">cython_FILE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/13/struct/">struct</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/07/rsync/">rsync</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/03/cython-document2/">cython-document2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/03/cython-document1/">cython-document1</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/07/ffmpeg/">ffmpeg 从视频中截取图像帧</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/07/cv2-python/">cv2_python</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/17/supervisord/">supervisord</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/17/cython/">cython 基础详解</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 Sound
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+    <script src="/js/GithubRepoWidget.js"></script>
+
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+             github: ".github-widget a", 
+            
+            
+            
+            
+             articleNav: "#article-nav a, #post-nav-button a", 
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

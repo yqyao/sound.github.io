@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Sound" />
+
+
+
+<meta name="description" content="各种数据集到Voc格式VOC数据集
+这里我们只看有关检测的部分
+
+以VOC2012为例
+包含以下文件夹
+
+
+JPEGImages 
+
+存储着图片
+
+
+Annotations
+
+存储这相关的标签，以xml格式给出,下面为样例
+123456789101112131415161718192021222324252627282930313233343536373839&amp;lt;annotation&amp;gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="各种数据集到Voc格式">
+<meta property="og:url" content="http://yqyao.github.io/2017/10/23/dataset2voc/index.html">
+<meta property="og:site_name" content="Sound">
+<meta property="og:description" content="各种数据集到Voc格式VOC数据集
+这里我们只看有关检测的部分
+
+以VOC2012为例
+包含以下文件夹
+
+
+JPEGImages 
+
+存储着图片
+
+
+Annotations
+
+存储这相关的标签，以xml格式给出,下面为样例
+123456789101112131415161718192021222324252627282930313233343536373839&amp;lt;annotation&amp;gt;">
+<meta property="og:updated_time" content="2017-10-23T14:00:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="各种数据集到Voc格式">
+<meta name="twitter:description" content="各种数据集到Voc格式VOC数据集
+这里我们只看有关检测的部分
+
+以VOC2012为例
+包含以下文件夹
+
+
+JPEGImages 
+
+存储着图片
+
+
+Annotations
+
+存储这相关的标签，以xml格式给出,下面为样例
+123456789101112131415161718192021222324252627282930313233343536373839&amp;lt;annotation&amp;gt;">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="Sound" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/back.jpg">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>各种数据集到Voc格式 | Sound</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/back.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Sound</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/yongqiang_yao@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/yqyao" title="GitHub"></a>
+                            
+                                <a class="fa 知乎" href="/zhihu" title="知乎"></a>
+                            
+                                <a class="fa 网易云音乐" href="/netease" title="网易云音乐"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cv2/">cv2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cython/">cython</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/libcurl/">libcurl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sersync同步配置/">sersync同步配置</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">爱家人，爱生活</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Sound</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/back.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Sound</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/yongqiang_yao@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/yqyao" title="GitHub"></a>
+                            
+                                <a class="fa 知乎" target="_blank" href="/zhihu" title="知乎"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="/netease" title="网易云音乐"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-dataset2voc" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/10/23/dataset2voc/" class="article-date">
+      <time datetime="2017-10-23T14:00:39.000Z" itemprop="datePublished">2017-10-23</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      各种数据集到Voc格式
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/个人学习/">个人学习</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="各种数据集到Voc格式"><a href="#各种数据集到Voc格式" class="headerlink" title="各种数据集到Voc格式"></a>各种数据集到Voc格式</h1><h2 id="VOC数据集"><a href="#VOC数据集" class="headerlink" title="VOC数据集"></a>VOC数据集</h2><blockquote>
+<p>这里我们只看有关检测的部分</p>
+</blockquote>
+<h3 id="以VOC2012为例"><a href="#以VOC2012为例" class="headerlink" title="以VOC2012为例"></a>以VOC2012为例</h3><blockquote>
+<p>包含以下文件夹</p>
+</blockquote>
+<ul>
+<li><p>JPEGImages </p>
+<blockquote>
+<p>存储着图片</p>
+</blockquote>
+</li>
+<li><p>Annotations</p>
+<blockquote>
+<p>存储这相关的标签，以xml格式给出,下面为样例</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">annotation</span>&gt;</span>  </div><div class="line">    <span class="tag">&lt;<span class="name">folder</span>&gt;</span>VOC2012<span class="tag">&lt;/<span class="name">folder</span>&gt;</span>                             </div><div class="line">    <span class="tag">&lt;<span class="name">filename</span>&gt;</span>2007_000392.jpg<span class="tag">&lt;/<span class="name">filename</span>&gt;</span>                               //文件名  </div><div class="line">    <span class="tag">&lt;<span class="name">source</span>&gt;</span>                                                           //图像来源（不重要）  </div><div class="line">        <span class="tag">&lt;<span class="name">database</span>&gt;</span>The VOC2007 Database<span class="tag">&lt;/<span class="name">database</span>&gt;</span>  </div><div class="line">        <span class="tag">&lt;<span class="name">annotation</span>&gt;</span>PASCAL VOC2007<span class="tag">&lt;/<span class="name">annotation</span>&gt;</span>  </div><div class="line">        <span class="tag">&lt;<span class="name">image</span>&gt;</span>flickr<span class="tag">&lt;/<span class="name">image</span>&gt;</span>  </div><div class="line">    <span class="tag">&lt;/<span class="name">source</span>&gt;</span>  </div><div class="line">    <span class="tag">&lt;<span class="name">size</span>&gt;</span>                                               //图像尺寸（长宽以及通道数）                        </div><div class="line">        <span class="tag">&lt;<span class="name">width</span>&gt;</span>500<span class="tag">&lt;/<span class="name">width</span>&gt;</span>  </div><div class="line">        <span class="tag">&lt;<span class="name">height</span>&gt;</span>332<span class="tag">&lt;/<span class="name">height</span>&gt;</span>  </div><div class="line">        <span class="tag">&lt;<span class="name">depth</span>&gt;</span>3<span class="tag">&lt;/<span class="name">depth</span>&gt;</span>  </div><div class="line">    <span class="tag">&lt;/<span class="name">size</span>&gt;</span>  </div><div class="line">    <span class="tag">&lt;<span class="name">segmented</span>&gt;</span>1<span class="tag">&lt;/<span class="name">segmented</span>&gt;</span>                                   //是否用于分割（在图像物体识别中01无所谓）  </div><div class="line">    <span class="tag">&lt;<span class="name">object</span>&gt;</span>                                                           //检测到的物体  </div><div class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>horse<span class="tag">&lt;/<span class="name">name</span>&gt;</span>                                         //物体类别  </div><div class="line">        <span class="tag">&lt;<span class="name">pose</span>&gt;</span>Right<span class="tag">&lt;/<span class="name">pose</span>&gt;</span>                                         //拍摄角度  </div><div class="line">        <span class="tag">&lt;<span class="name">truncated</span>&gt;</span>0<span class="tag">&lt;/<span class="name">truncated</span>&gt;</span>                                   //是否被截断（0表示完整）  </div><div class="line">        <span class="tag">&lt;<span class="name">difficult</span>&gt;</span>0<span class="tag">&lt;/<span class="name">difficult</span>&gt;</span>                                   //目标是否难以识别（0表示容易识别）  </div><div class="line">        <span class="tag">&lt;<span class="name">bndbox</span>&gt;</span>                                                   //bounding-box（包含左下角和右上角xy坐标）  </div><div class="line">            <span class="tag">&lt;<span class="name">xmin</span>&gt;</span>100<span class="tag">&lt;/<span class="name">xmin</span>&gt;</span>  </div><div class="line">            <span class="tag">&lt;<span class="name">ymin</span>&gt;</span>96<span class="tag">&lt;/<span class="name">ymin</span>&gt;</span>  </div><div class="line">            <span class="tag">&lt;<span class="name">xmax</span>&gt;</span>355<span class="tag">&lt;/<span class="name">xmax</span>&gt;</span>  </div><div class="line">            <span class="tag">&lt;<span class="name">ymax</span>&gt;</span>324<span class="tag">&lt;/<span class="name">ymax</span>&gt;</span>  </div><div class="line">        <span class="tag">&lt;/<span class="name">bndbox</span>&gt;</span>  </div><div class="line">    <span class="tag">&lt;/<span class="name">object</span>&gt;</span>  </div><div class="line">    <span class="tag">&lt;<span class="name">object</span>&gt;</span>                                                           //检测到多个物体  </div><div class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>person<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </div><div class="line">        <span class="tag">&lt;<span class="name">pose</span>&gt;</span>Unspecified<span class="tag">&lt;/<span class="name">pose</span>&gt;</span>  </div><div class="line">        <span class="tag">&lt;<span class="name">truncated</span>&gt;</span>0<span class="tag">&lt;/<span class="name">truncated</span>&gt;</span>  </div><div class="line">        <span class="tag">&lt;<span class="name">difficult</span>&gt;</span>0<span class="tag">&lt;/<span class="name">difficult</span>&gt;</span>  </div><div class="line">        <span class="tag">&lt;<span class="name">bndbox</span>&gt;</span>  </div><div class="line">            <span class="tag">&lt;<span class="name">xmin</span>&gt;</span>198<span class="tag">&lt;/<span class="name">xmin</span>&gt;</span>  </div><div class="line">            <span class="tag">&lt;<span class="name">ymin</span>&gt;</span>58<span class="tag">&lt;/<span class="name">ymin</span>&gt;</span>  </div><div class="line">            <span class="tag">&lt;<span class="name">xmax</span>&gt;</span>286<span class="tag">&lt;/<span class="name">xmax</span>&gt;</span>  </div><div class="line">            <span class="tag">&lt;<span class="name">ymax</span>&gt;</span>197<span class="tag">&lt;/<span class="name">ymax</span>&gt;</span>  </div><div class="line">        <span class="tag">&lt;/<span class="name">bndbox</span>&gt;</span>  </div><div class="line">    <span class="tag">&lt;/<span class="name">object</span>&gt;</span>  </div><div class="line"><span class="tag">&lt;/<span class="name">annotation</span>&gt;</span></div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>ImageSets</p>
+<blockquote>
+<p>存放的是每一种类型的challenge对应的图像数据<br>对于检测我们关心的是 里面的Main文件夹，有每一类的train.txt 和val.txt以及test.txt</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="Caltech-Pedestrian数据集"><a href="#Caltech-Pedestrian数据集" class="headerlink" title="Caltech Pedestrian数据集"></a>Caltech Pedestrian数据集</h2><blockquote>
+<p>这是个行人数据集，数据集提供的图片是以seq的形式存的，标签是以vbb的形式存储的<br>由于原作者是用matlab实现的，因此格式都是以matlab的形式给出。但是我习惯用python，因此<br>查找资料，找到了python版本的转化方式</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="生成对应图片以及对应的txt格式的标签"><a href="#生成对应图片以及对应的txt格式的标签" class="headerlink" title="生成对应图片以及对应的txt格式的标签"></a>生成对应图片以及对应的txt格式的标签</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#encoding:utf-8</span></div><div class="line"><span class="keyword">import</span> os, glob</div><div class="line"><span class="keyword">from</span> scipy.io <span class="keyword">import</span> loadmat</div><div class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict</div><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="keyword">from</span> xml.dom.minidom <span class="keyword">import</span> Document</div><div class="line"><span class="keyword">import</span> cv2</div><div class="line"><span class="keyword">import</span> os.path <span class="keyword">as</span> osp</div><div class="line"><span class="keyword">from</span> multiprocessing.dummy <span class="keyword">import</span> Pool <span class="keyword">as</span> ThreadPool</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">vbb_anno2dict</span><span class="params">(vbb_file, cam_id)</span>:</span></div><div class="line">    filename = os.path.splitext(os.path.basename(vbb_file))[<span class="number">0</span>]</div><div class="line">    annos = defaultdict(dict)</div><div class="line">    vbb = loadmat(vbb_file)</div><div class="line">    <span class="comment"># object info in each frame: id, pos, occlusion, lock, posv</span></div><div class="line">    objLists = vbb[<span class="string">'A'</span>][<span class="number">0</span>][<span class="number">0</span>][<span class="number">1</span>][<span class="number">0</span>]</div><div class="line">    objLbl = [str(v[<span class="number">0</span>]) <span class="keyword">for</span> v <span class="keyword">in</span> vbb[<span class="string">'A'</span>][<span class="number">0</span>][<span class="number">0</span>][<span class="number">4</span>][<span class="number">0</span>]]</div><div class="line">    <span class="comment"># person index</span></div><div class="line">    person_index_list = np.where(np.array(objLbl) == <span class="string">"person"</span>)[<span class="number">0</span>]</div><div class="line">    <span class="keyword">for</span> frame_id, obj <span class="keyword">in</span> enumerate(objLists):</div><div class="line">        <span class="keyword">if</span> len(obj) &gt; <span class="number">0</span>:</div><div class="line">            frame_name = str(cam_id) + <span class="string">"_"</span> + str(filename) + <span class="string">"_I"</span> + str(frame_id).zfill(<span class="number">5</span>) + <span class="string">".jpg"</span></div><div class="line">            annos[frame_name] = defaultdict(list)</div><div class="line">            annos[frame_name][<span class="string">"id"</span>] = frame_name</div><div class="line">            annos[frame_name][<span class="string">"label"</span>] = <span class="string">"person"</span></div><div class="line">            <span class="keyword">for</span> id, pos, occl <span class="keyword">in</span> zip(obj[<span class="string">'id'</span>][<span class="number">0</span>], obj[<span class="string">'pos'</span>][<span class="number">0</span>], obj[<span class="string">'occl'</span>][<span class="number">0</span>]):</div><div class="line">                id = int(id[<span class="number">0</span>][<span class="number">0</span>]) - <span class="number">1</span>  <span class="comment"># for matlab start from 1 not 0</span></div><div class="line">                <span class="keyword">if</span> <span class="keyword">not</span> id <span class="keyword">in</span> person_index_list:  <span class="comment"># only use bbox whose label is person</span></div><div class="line">                    <span class="keyword">continue</span></div><div class="line">                pos = pos[<span class="number">0</span>].tolist()</div><div class="line">                occl = int(occl[<span class="number">0</span>][<span class="number">0</span>])</div><div class="line">                annos[frame_name][<span class="string">"occlusion"</span>].append(occl)</div><div class="line">                annos[frame_name][<span class="string">"bbox"</span>].append(pos)</div><div class="line">            <span class="keyword">if</span> <span class="keyword">not</span> annos[frame_name][<span class="string">"bbox"</span>]:</div><div class="line">                <span class="keyword">del</span> annos[frame_name]</div><div class="line">    <span class="keyword">return</span> annos</div><div class="line"></div><div class="line">anno_trans = &#123;<span class="string">"person"</span>: <span class="string">"Pedestrian"</span>&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">seq2img</span><span class="params">(annos, seq_file, outdir, cam_id)</span>:</span></div><div class="line">    <span class="comment"># read .seq file, and save the images into the savepath</span></div><div class="line">    <span class="keyword">with</span> open(seq_file,<span class="string">'rb'</span>) <span class="keyword">as</span> f:</div><div class="line">        string = str(f.read())</div><div class="line">        splitstring = <span class="string">"\xFF\xD8\xFF\xE0\x00\x10\x4A\x46\x49\x46"</span></div><div class="line">        <span class="comment"># split .seq file into segment with the image prefix</span></div><div class="line">        strlist=string.split(splitstring)</div><div class="line">    index = <span class="number">1</span></div><div class="line">    <span class="keyword">for</span> img <span class="keyword">in</span> strlist[:]:</div><div class="line">        v_id = os.path.splitext(os.path.basename(seq_file))[<span class="number">0</span>]</div><div class="line">        cap_frames_index = np.sort([int(os.path.splitext(id)[<span class="number">0</span>].split(<span class="string">"_"</span>)[<span class="number">2</span>][<span class="number">2</span>:]) <span class="keyword">for</span> id <span class="keyword">in</span> annos.keys()])</div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> index <span class="keyword">in</span> cap_frames_index:</div><div class="line">            index += <span class="number">1</span></div><div class="line">            <span class="keyword">continue</span></div><div class="line">        outname = os.path.join(outdir, str(cam_id)+<span class="string">"_"</span>+v_id+<span class="string">"_I"</span>+str(index).zfill(<span class="number">5</span>)+<span class="string">".jpg"</span>)</div><div class="line">        <span class="keyword">with</span> open(outname, <span class="string">"wb+"</span>) <span class="keyword">as</span> f:</div><div class="line">            f.write(splitstring)</div><div class="line">            f.write(img)</div><div class="line">        index += <span class="number">1</span></div><div class="line">    image_info = dict()</div><div class="line">    image_info[<span class="string">"height"</span>] = <span class="string">"480"</span></div><div class="line">    image_info[<span class="string">"width"</span>] = <span class="string">"640"</span></div><div class="line">    image_info[<span class="string">"type"</span>] = <span class="string">".jpg"</span></div><div class="line">    <span class="keyword">return</span> image_info</div><div class="line"> </div><div class="line"> <span class="comment">#convert anno_file to txt_label </span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_anno_file</span><span class="params">(vbb_inputdir, seq_inputdir, image_outputdir, txt_label_dir)</span>:</span></div><div class="line">    <span class="comment"># annotation sub-directories in hda annotation input directory</span></div><div class="line">    <span class="keyword">assert</span> os.path.exists(vbb_inputdir)</div><div class="line">    sub_dirs = os.listdir(vbb_inputdir)</div><div class="line">    <span class="keyword">for</span> sub_dir <span class="keyword">in</span> sub_dirs[:]:</div><div class="line">        <span class="keyword">print</span> <span class="string">"Parsing annotations of camera: "</span>, sub_dir</div><div class="line">        cam_id = sub_dir</div><div class="line">        vbb_files = glob.glob(os.path.join(vbb_inputdir, sub_dir, <span class="string">"*.vbb"</span>))</div><div class="line">        <span class="keyword">for</span> vbb_file <span class="keyword">in</span> vbb_files[:]:</div><div class="line">            annos = vbb_anno2dict(vbb_file, cam_id)</div><div class="line">            <span class="keyword">if</span> annos:</div><div class="line">                seq_file = os.path.join(seq_inputdir, sub_dir, os.path.splitext(os.path.basename(vbb_file))[<span class="number">0</span>]+<span class="string">".seq"</span>)</div><div class="line">                <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(image_outputdir):</div><div class="line">                    os.makedirs(image_outputdir)</div><div class="line">                image_info = seq2img(annos, seq_file, image_outputdir, cam_id)</div><div class="line"></div><div class="line">                <span class="keyword">for</span> filename, anno <span class="keyword">in</span> sorted(annos.items(), key=<span class="keyword">lambda</span> x: x[<span class="number">0</span>])[:]:</div><div class="line">                    <span class="keyword">if</span> <span class="string">"bbox"</span> <span class="keyword">in</span> anno:</div><div class="line">                        name = os.path.splitext(os.path.basename(vbb_file))[<span class="number">0</span>]</div><div class="line">                        fullname = os.path.join(txt_label_dir, filename.split(<span class="string">"."</span>)[<span class="number">0</span>]+<span class="string">".txt"</span>)</div><div class="line">                        <span class="keyword">with</span> open(fullname, <span class="string">"ab"</span>) <span class="keyword">as</span> f:</div><div class="line">                            <span class="keyword">for</span> bbox <span class="keyword">in</span> anno[<span class="string">"bbox"</span>]:</div><div class="line">                                <span class="keyword">print</span> &gt;&gt;f, <span class="string">"Pedestrian"</span>, bbox[<span class="number">0</span>], bbox[<span class="number">1</span>], bbox[<span class="number">2</span>], bbox[<span class="number">3</span>], <span class="number">480</span>, <span class="number">640</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">    dataset_info = &#123;<span class="string">"name"</span>: <span class="string">"Caltech"</span>, <span class="string">"desc"</span>: <span class="string">"Caltech pedestrian"</span>&#125;</div><div class="line">    seq_inputdir = <span class="string">"/home/safe_data_dir/caltech_pedestrian"</span></div><div class="line">    vbb_inputdir = <span class="string">"/home/safe_data_dir/caltech_pedestrian/annotations"</span></div><div class="line">    image_outputdir = <span class="string">"/localSSD/yyq/test"</span></div><div class="line">    txt_label_dir = <span class="string">"/localSSD/yyq/test"</span></div><div class="line">    parse_anno_file(vbb_inputdir, seq_inputdir, image_outputdir, txt_label_dir)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    main()</div></pre></td></tr></table></figure>
+<h3 id="Caltech2Voc"><a href="#Caltech2Voc" class="headerlink" title="Caltech2Voc"></a>Caltech2Voc</h3><blockquote>
+<p>为了保证和下面保持统一，因此这里先转化一份txt的label，然后用后面的统一脚本转化为xml个的voc格式label</p>
+</blockquote>
+<h2 id="Kitti-数据集"><a href="#Kitti-数据集" class="headerlink" title="Kitti 数据集"></a>Kitti 数据集</h2><blockquote>
+<p>KITTI数据集由德国卡尔斯鲁厄理工学院和丰田美国技术研究院联合创办，是目前国际上最大的自动驾驶场景下的计算机视觉算法评测数据集。标签格式为</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Valus</th>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>1</td>
+<td>type</td>
+<td>describes the type of oject</td>
+</tr>
+<tr>
+<td></td>
+<td>1</td>
+<td>truncated</td>
+<td>float from 0(non-truncated) to 1(truncated)</td>
+</tr>
+<tr>
+<td></td>
+<td>1</td>
+<td>occuded</td>
+<td>0 -full visible, 1- partly occluded 2 -largely occluded 3-unknown </td>
+</tr>
+<tr>
+<td></td>
+<td>1</td>
+<td>alpha</td>
+<td>observation angle of the object</td>
+</tr>
+<tr>
+<td></td>
+<td>4</td>
+<td>bbox</td>
+<td>2D bounding bbox of object</td>
+</tr>
+<tr>
+<td></td>
+<td>3</td>
+<td>dimensions</td>
+<td>3D dimmensions</td>
+</tr>
+<tr>
+<td></td>
+<td>3</td>
+<td>locations</td>
+<td>3D object location</td>
+</tr>
+<tr>
+<td></td>
+<td>1</td>
+<td>rotations</td>
+<td>Rotation</td>
+</tr>
+<tr>
+<td></td>
+<td>1</td>
+<td>score</td>
+<td>results</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Kitti2Voc"><a href="#Kitti2Voc" class="headerlink" title="Kitti2Voc"></a>Kitti2Voc</h3><ul>
+<li>kitti的标签是以txt的格式给出，每张图片一个txt 标签，我们根据此txt转化为对应的xml即可.为了统一我们先将kitti的txt做一些转化，具体转化生成的txt格式为 type,xmin,ymin,xmax,ymax,height, width.方便后续转xml格式</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">#encoding:utf-8</span></div><div class="line"><span class="string">'''</span></div><div class="line">根据一个给定的XML Schema，使用DOM树的形式从空白文件生成一个XML。</div><div class="line">'''</div><div class="line"><span class="keyword">from</span> xml.dom.minidom <span class="keyword">import</span> Document</div><div class="line"><span class="keyword">import</span> cv2, os</div><div class="line"><span class="keyword">import</span> os.path <span class="keyword">as</span> osp</div><div class="line"><span class="keyword">from</span> multiprocessing.dummy <span class="keyword">import</span> Pool <span class="keyword">as</span> ThreadPool</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_xml</span><span class="params">(name, split_lines, class_ind, image_info, dataset_info)</span>:</span></div><div class="line">    doc = Document()  <span class="comment">#创建DOM文档对象</span></div><div class="line"></div><div class="line">    annotation = doc.createElement(<span class="string">'annotation'</span>)</div><div class="line">    doc.appendChild(annotation)</div><div class="line"></div><div class="line">    title = doc.createElement(<span class="string">'folder'</span>)</div><div class="line">    title_text = doc.createTextNode(dataset_info[<span class="string">"name"</span>])</div><div class="line">    title.appendChild(title_text)</div><div class="line">    annotation.appendChild(title)</div><div class="line"></div><div class="line">    img_name = name + image_info[<span class="string">"type"</span>]</div><div class="line"></div><div class="line">    title = doc.createElement(<span class="string">'filename'</span>)</div><div class="line">    title_text = doc.createTextNode(img_name)</div><div class="line">    title.appendChild(title_text)</div><div class="line">    annotation.appendChild(title)</div><div class="line"></div><div class="line">    source = doc.createElement(<span class="string">'source'</span>)</div><div class="line">    annotation.appendChild(source)</div><div class="line"></div><div class="line">    title = doc.createElement(<span class="string">'database'</span>)</div><div class="line">    title_text = doc.createTextNode(dataset_info[<span class="string">"desc"</span>])</div><div class="line">    title.appendChild(title_text)</div><div class="line">    source.appendChild(title)</div><div class="line"></div><div class="line">    title = doc.createElement(<span class="string">'annotation'</span>)</div><div class="line">    title_text = doc.createTextNode(dataset_info[<span class="string">"name"</span>])</div><div class="line">    title.appendChild(title_text)</div><div class="line">    source.appendChild(title)</div><div class="line"></div><div class="line">    size = doc.createElement(<span class="string">'size'</span>)</div><div class="line">    annotation.appendChild(size)</div><div class="line"></div><div class="line">    title = doc.createElement(<span class="string">'width'</span>)</div><div class="line">    title_text = doc.createTextNode(image_info[<span class="string">"width"</span>])</div><div class="line">    title.appendChild(title_text)</div><div class="line">    size.appendChild(title)</div><div class="line"></div><div class="line">    title = doc.createElement(<span class="string">'height'</span>)</div><div class="line">    title_text = doc.createTextNode(image_info[<span class="string">"height"</span>])</div><div class="line">    title.appendChild(title_text)</div><div class="line">    size.appendChild(title)</div><div class="line"></div><div class="line">    title = doc.createElement(<span class="string">'depth'</span>)</div><div class="line">    title_text = doc.createTextNode(str(<span class="number">3</span>))</div><div class="line">    title.appendChild(title_text)</div><div class="line">    size.appendChild(title)</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">for</span> split_line <span class="keyword">in</span> split_lines:</div><div class="line">        line = split_line.strip().split()</div><div class="line">        <span class="keyword">if</span> line[<span class="number">0</span>] <span class="keyword">in</span> class_ind:</div><div class="line">            object = doc.createElement(<span class="string">'object'</span>)</div><div class="line">            annotation.appendChild(object)</div><div class="line"></div><div class="line">            title = doc.createElement(<span class="string">'name'</span>)</div><div class="line">            title_text = doc.createTextNode(line[<span class="number">0</span>])</div><div class="line">            title.appendChild(title_text)</div><div class="line">            object.appendChild(title)</div><div class="line"></div><div class="line">            bndbox = doc.createElement(<span class="string">'bndbox'</span>)</div><div class="line">            object.appendChild(bndbox)</div><div class="line">            title = doc.createElement(<span class="string">'xmin'</span>)</div><div class="line">            title_text = doc.createTextNode(str(max(<span class="number">0</span>, int(float(line[<span class="number">1</span>])))))</div><div class="line">            title.appendChild(title_text)</div><div class="line">            bndbox.appendChild(title)</div><div class="line">            title = doc.createElement(<span class="string">'ymin'</span>)</div><div class="line">            title_text = doc.createTextNode(str(max(<span class="number">0</span>, int(float(line[<span class="number">2</span>])))))</div><div class="line">            title.appendChild(title_text)</div><div class="line">            bndbox.appendChild(title)</div><div class="line">            title = doc.createElement(<span class="string">'xmax'</span>)</div><div class="line">            title_text = doc.createTextNode(str(min(image_info[<span class="string">"width"</span>], int(float(line[<span class="number">3</span>])))))</div><div class="line">            title.appendChild(title_text)</div><div class="line">            bndbox.appendChild(title)</div><div class="line">            title = doc.createElement(<span class="string">'ymax'</span>)</div><div class="line">            title_text = doc.createTextNode(str(min(image_info[<span class="string">"height"</span>], int(float(line[<span class="number">4</span>])))))</div><div class="line">            title.appendChild(title_text)</div><div class="line">            bndbox.appendChild(title)</div><div class="line"></div><div class="line">    <span class="keyword">with</span> open(os.path.join(label_xml_dir, name + <span class="string">'.xml'</span>), <span class="string">'wb'</span>) <span class="keyword">as</span> f:</div><div class="line">        f.write(doc.toprettyxml(indent = <span class="string">'\t'</span>))</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">convert</span><span class="params">(label)</span>:</span></div><div class="line">    filename = label.split(<span class="string">"."</span>)[<span class="number">0</span>]</div><div class="line">    image_info = &#123;<span class="string">"type"</span>: <span class="string">".jpg"</span>&#125;</div><div class="line">    <span class="keyword">with</span> open(osp.join(label_txt_dir, label), <span class="string">"rb"</span>) <span class="keyword">as</span> f:</div><div class="line">        split_lines = f.readlines()</div><div class="line">        <span class="keyword">for</span> split_line <span class="keyword">in</span> split_lines[:<span class="number">1</span>]:</div><div class="line">            line = split_line.strip().split()</div><div class="line">            image_info[<span class="string">"width"</span>] = line[<span class="number">-1</span>]</div><div class="line">            image_info[<span class="string">"height"</span>] = line[<span class="number">-2</span>]</div><div class="line">        generate_xml(filename, split_lines, class_ind, image_info, dataset_info)</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    class_ind=(<span class="string">'Pedestrian'</span>, <span class="string">'Car'</span>, <span class="string">'Cyclist'</span>)</div><div class="line">    label_txt_dir = <span class="string">"/your/txt_label_path"</span></div><div class="line">    label_xml_dir = <span class="string">"/your/xml_out_label_path"</span></div><div class="line">    dataset_info = &#123;<span class="string">"name"</span>: <span class="string">"TCDB"</span>, <span class="string">"desc"</span>: <span class="string">"TCDB dataset"</span>&#125;</div><div class="line">    pool = ThreadPool(processes=<span class="number">20</span>)</div><div class="line">    pool.map(convert, os.listdir(label_txt_dir))</div><div class="line">    pool.close()</div><div class="line">    pool.join()</div></pre></td></tr></table></figure>
+<h2 id="Tsinghua-Daimler-Cyclist-Benchmark"><a href="#Tsinghua-Daimler-Cyclist-Benchmark" class="headerlink" title="Tsinghua-Daimler Cyclist Benchmark"></a>Tsinghua-Daimler Cyclist Benchmark</h2><blockquote>
+<p>清华大学的一个自行车数据集，我们这里只用到其train的数据，<a href="http://www.gavrila.net/Datasets/Daimler_Pedestrian_Benchmark_D/Tsinghua-Daimler_Cyclist_Detec/tsinghua-daimler_cyclist_detec.html" target="_blank" rel="external">数据集链接</a>。其给出的label格式为json格式，比较方便解析</p>
+</blockquote>
+<h3 id="图片分割处理"><a href="#图片分割处理" class="headerlink" title="图片分割处理"></a>图片分割处理</h3><blockquote>
+<p>原生的图片的尺寸为1024x2048，对于我来说太大，而且比例不大合适，因此我决定对图片进行裁剪。决定生成1024x1024的两张图片，只保留包含完整标注的图片和label</p>
+</blockquote>
+<p><em>代码</em></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> os</div><div class="line"><span class="keyword">import</span> os.path <span class="keyword">as</span> osp</div><div class="line"><span class="keyword">import</span> json</div><div class="line"><span class="keyword">import</span> cv2</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"><span class="keyword">import</span> subprocess</div><div class="line"><span class="keyword">from</span> multiprocessing.dummy <span class="keyword">import</span> Pool <span class="keyword">as</span> ThreadPool</div><div class="line">label_folder = <span class="string">"/yourpath/tcdb/labelData/train/tsinghuaDaimlerDataset"</span></div><div class="line">image_folder = <span class="string">"/yourpath/tcdb/leftImg8bit/train/tsinghuaDaimlerDataset"</span></div><div class="line">save_image_folder = <span class="string">"/yourpath/tcdb/reshape_image"</span></div><div class="line">save_label_folder = <span class="string">"/yourpath/tcdb/reshape_label"</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">convert2txt</span><span class="params">(origin_label)</span>:</span></div><div class="line">    <span class="keyword">with</span> open(osp.join(label_folder, origin_label), <span class="string">"rb"</span>) <span class="keyword">as</span> f:</div><div class="line">        label_dict = json.load(f)</div><div class="line">        image_name = label_dict[<span class="string">"imagename"</span>]</div><div class="line">        bbox_list = label_dict[<span class="string">"children"</span>]</div><div class="line">        im = cv2.imread(osp.join(image_folder, image_name))</div><div class="line">        im_left = im[:,:<span class="number">1024</span>,:]</div><div class="line">        im_left =  cv2.resize(im_left, (<span class="number">512</span>, <span class="number">512</span>))</div><div class="line">        im_right = im[:,<span class="number">1024</span>:<span class="number">2048</span>,:]</div><div class="line">        im_right = cv2.resize(im_right, (<span class="number">512</span>, <span class="number">512</span>))</div><div class="line">        image_id = image_name.split(<span class="string">'.'</span>)[<span class="number">0</span>]</div><div class="line">        cv2.imwrite(osp.join(save_image_folder, <span class="string">""</span>.join([image_id, <span class="string">"_left"</span>, <span class="string">".jpg"</span>])), im_left)</div><div class="line">        cv2.imwrite(osp.join(save_image_folder, <span class="string">""</span>.join([image_id, <span class="string">"_right"</span>, <span class="string">".jpg"</span>])), im_right)</div><div class="line">    left_label = open(osp.join(save_label_folder, <span class="string">""</span>.join([image_id, <span class="string">"_left"</span>, <span class="string">".txt"</span>])), <span class="string">"ab"</span>)</div><div class="line">    right_label = open(osp.join(save_label_folder, <span class="string">""</span>.join([image_id, <span class="string">"_right"</span>, <span class="string">".txt"</span>])), <span class="string">"ab"</span>)        </div><div class="line">    <span class="keyword">for</span> bbox <span class="keyword">in</span> bbox_list:</div><div class="line">        <span class="keyword">if</span> bbox[<span class="string">"mincol"</span>] &gt; <span class="number">1023</span>:</div><div class="line">            xmin = bbox[<span class="string">"mincol"</span>] - <span class="number">1024</span></div><div class="line">            xmax = bbox[<span class="string">"maxcol"</span>] - <span class="number">1024</span></div><div class="line">            ymin = bbox[<span class="string">'minrow'</span>]</div><div class="line">            ymax = bbox[<span class="string">'maxrow'</span>]</div><div class="line">            <span class="keyword">print</span> &gt;&gt;right_label, <span class="string">"Cyclist"</span>, xmin / <span class="number">2</span>, ymin / <span class="number">2</span>, xmax / <span class="number">2</span>, ymax / <span class="number">2</span>, <span class="number">512</span>, <span class="number">512</span></div><div class="line">            <span class="keyword">continue</span></div><div class="line">        <span class="keyword">if</span> bbox[<span class="string">"maxcol"</span>] &lt; <span class="number">1024</span>:</div><div class="line">            xmin = bbox[<span class="string">'mincol'</span>]</div><div class="line">            xmax = bbox[<span class="string">'maxcol'</span>]</div><div class="line">            ymin = bbox[<span class="string">'minrow'</span>]</div><div class="line">            ymax = bbox[<span class="string">'maxrow'</span>]</div><div class="line">            <span class="keyword">print</span> &gt;&gt;left_label, <span class="string">"Cyclist"</span>, xmin / <span class="number">2</span>, ymin / <span class="number">2</span>, xmax / <span class="number">2</span>, ymax / <span class="number">2</span>, <span class="number">512</span>, <span class="number">512</span></div><div class="line">            <span class="keyword">continue</span></div><div class="line">    left_label.close()</div><div class="line">    right_label.close()</div><div class="line"></div><div class="line">pool = ThreadPool(processes=<span class="number">20</span>)</div><div class="line">pool.map(convert2txt, os.listdir(label_folder))</div><div class="line">pool.close()</div><div class="line">pool.join()</div><div class="line"></div><div class="line"><span class="comment">#remove no label txt and image</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">removeNoneLabel</span><span class="params">(label)</span>:</span></div><div class="line"><span class="comment"># for label in os.listdir(save_label_folder):</span></div><div class="line">    full_path = os.path.join(save_label_folder, label)</div><div class="line">    img_path = os.path.join(save_image_folder, label.split(<span class="string">'.'</span>)[<span class="number">0</span>]+<span class="string">".jpg"</span>)</div><div class="line">    fsize = os.path.getsize(full_path)</div><div class="line">    <span class="keyword">if</span> fsize == <span class="number">0</span>:</div><div class="line">        subprocess.call([<span class="string">"rm"</span>, full_path])</div><div class="line">        subprocess.call([<span class="string">"rm"</span>, img_path])</div><div class="line"></div><div class="line">pool = ThreadPool(processes=<span class="number">20</span>)</div><div class="line">pool.map(removeNoneLabel, os.listdir(save_label_folder))</div><div class="line">pool.close()</div><div class="line">pool.join()</div></pre></td></tr></table></figure>
+<h3 id="tcdb2Voc"><a href="#tcdb2Voc" class="headerlink" title="tcdb2Voc"></a>tcdb2Voc</h3><blockquote>
+<p>经过前一部分对图片和label进行处理我们最终得到两个文件夹。一个为image存放的是生成的图片，一个是label存放的生成的txt label。我们可以根据之前的脚本生成对应的xml格式</p>
+</blockquote>
+<h2 id="detrac数据集"><a href="#detrac数据集" class="headerlink" title="detrac数据集"></a>detrac数据集</h2><blockquote>
+<p>数据集主要拍摄于北京和天津的道路过街天桥，并手动标注了8250个车辆,标注格式以xml格式给出，但是它是从视频中截帧截出来的，因此一个xml里面包含的是从某个视频截出的所有图片标签。由于test没有标签，我们只用train数据集，包含60个sequences。</p>
+</blockquote>
+<h3 id="生成对应的txt-label"><a href="#生成对应的txt-label" class="headerlink" title="生成对应的txt_label"></a>生成对应的txt_label</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#encoding:utf-8</span></div><div class="line"><span class="keyword">import</span> xml.etree.ElementTree <span class="keyword">as</span> ET</div><div class="line"><span class="keyword">import</span> os</div><div class="line"><span class="keyword">import</span> os.path <span class="keyword">as</span> osp</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">origin_xml2txt</span><span class="params">()</span>:</span></div><div class="line">    xml_folder = <span class="string">"/localSSD/yyq/detrac/DETRAC-Train-Annotations-XML"</span></div><div class="line">    label_root = <span class="string">"/localSSD/yyq/detrac/label"</span></div><div class="line"></div><div class="line">    <span class="keyword">for</span> xml <span class="keyword">in</span> os.listdir(xml_folder)[:]:</div><div class="line">        label_folder = osp.join(label_root, xml.split(<span class="string">'.'</span>)[<span class="number">0</span>])</div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(label_folder):</div><div class="line">            os.makedirs(label_folder)</div><div class="line">        tree = ET.ElementTree(file=osp.join(xml_folder, xml))</div><div class="line">        root = tree.getroot()</div><div class="line">        <span class="keyword">for</span> child <span class="keyword">in</span> root:</div><div class="line">            <span class="keyword">if</span> <span class="string">'num'</span> <span class="keyword">in</span> child.attrib:</div><div class="line">                image_id = <span class="string">""</span>.join([<span class="string">"img"</span>, child.attrib[<span class="string">"num"</span>].zfill(<span class="number">5</span>)])</div><div class="line">                <span class="keyword">with</span> open(osp.join(label_folder, <span class="string">""</span>.join([image_id, <span class="string">".txt"</span>])), <span class="string">"ab"</span>) <span class="keyword">as</span> fw:</div><div class="line">                    <span class="keyword">for</span> target <span class="keyword">in</span> child:</div><div class="line">                        <span class="keyword">for</span> bbox <span class="keyword">in</span> target:</div><div class="line">                            xmin = max(<span class="number">0</span>, float(bbox[<span class="number">0</span>].attrib[<span class="string">'left'</span>]))</div><div class="line">                            ymin = max(<span class="number">0</span>, float(bbox[<span class="number">0</span>].attrib[<span class="string">'top'</span>]))</div><div class="line">                            xmax = min(float(bbox[<span class="number">0</span>].attrib[<span class="string">'left'</span>]) + float(bbox[<span class="number">0</span>].attrib[<span class="string">"width"</span>]), <span class="number">960.0</span>)</div><div class="line">                            ymax = min(float(bbox[<span class="number">0</span>].attrib[<span class="string">'top'</span>]) + float(bbox[<span class="number">0</span>].attrib[<span class="string">"height"</span>]), <span class="number">540.0</span>)</div><div class="line">                            <span class="keyword">print</span> &gt;&gt;fw,<span class="string">"Car"</span>, xmin, ymin, str(xmax), str(ymax), <span class="number">540</span>, <span class="number">960</span></div></pre></td></tr></table></figure>
+<h3 id="detrac2Voc"><a href="#detrac2Voc" class="headerlink" title="detrac2Voc"></a>detrac2Voc</h3><blockquote>
+<p>根据上面生成的txt_label，再根据txt2xml的脚本生成对应的xml标注。</p>
+</blockquote>
+
+      
+    </div>
+    
+  </div>
+  
+    
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/09/09/serialize/">
+                    Java Serialization
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#各种数据集到Voc格式"><span class="toc-number">1.</span> <span class="toc-text">各种数据集到Voc格式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#VOC数据集"><span class="toc-number">1.1.</span> <span class="toc-text">VOC数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#以VOC2012为例"><span class="toc-number">1.1.1.</span> <span class="toc-text">以VOC2012为例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Caltech-Pedestrian数据集"><span class="toc-number">1.2.</span> <span class="toc-text">Caltech Pedestrian数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#生成对应图片以及对应的txt格式的标签"><span class="toc-number">1.2.1.</span> <span class="toc-text">生成对应图片以及对应的txt格式的标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Caltech2Voc"><span class="toc-number">1.2.2.</span> <span class="toc-text">Caltech2Voc</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kitti-数据集"><span class="toc-number">1.3.</span> <span class="toc-text">Kitti 数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Kitti2Voc"><span class="toc-number">1.3.1.</span> <span class="toc-text">Kitti2Voc</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tsinghua-Daimler-Cyclist-Benchmark"><span class="toc-number">1.4.</span> <span class="toc-text">Tsinghua-Daimler Cyclist Benchmark</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#图片分割处理"><span class="toc-number">1.4.1.</span> <span class="toc-text">图片分割处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tcdb2Voc"><span class="toc-number">1.4.2.</span> <span class="toc-text">tcdb2Voc</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#detrac数据集"><span class="toc-number">1.5.</span> <span class="toc-text">detrac数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#生成对应的txt-label"><span class="toc-number">1.5.1.</span> <span class="toc-text">生成对应的txt_label</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#detrac2Voc"><span class="toc-number">1.5.2.</span> <span class="toc-text">detrac2Voc</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"各种数据集到Voc格式　| Sound　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/09/09/serialize/" title="下一篇: Java Serialization">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/23/dataset2voc/">各种数据集到Voc格式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/09/serialize/">Java Serialization</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/libcurl_use/">libcurl 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/30/zk_use/">zookeeper_use</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/30/Jersey/">Jersey_use</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/26/mysql++/">Mysql++ 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/zookeeper/">zookeeper</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/21/mysql/">mysql</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/21/python-class/">python_class</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/dlfcn/">dlfcn</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/03/git/">Git 使用笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/13/cython-FILE/">cython_FILE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/13/struct/">struct</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/07/rsync/">rsync</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/03/cython-document2/">cython-document2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/03/cython-document1/">cython-document1</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/07/ffmpeg/">ffmpeg 从视频中截取图像帧</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/07/cv2-python/">cv2_python</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/17/supervisord/">supervisord</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/17/cython/">cython 基础详解</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 Sound
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+    <script src="/js/GithubRepoWidget.js"></script>
+
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+             github: ".github-widget a", 
+            
+            
+            
+            
+             articleNav: "#article-nav a, #post-nav-button a", 
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>

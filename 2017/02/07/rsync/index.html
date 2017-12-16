@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Sound" />
+
+
+
+<meta name="description" content="为何要用这个？
+sersync是基于Inotify开发的，类似于Inotify-tools的工具
+sersync可以记录下被监听目录中发生变化的（包括增加、删除、修改）具体某一个文件或某一个目录的名字，然后使用rsync同步的时候，只同步发生变化的这个文件或者这个目录。
+rsync在同步的时候，只同步发生变化的这个文件或者这个目录（每次发生变化的数据相对整个同步目录数据来说是很小的，rsync在遍">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rsync">
+<meta property="og:url" content="http://yqyao.github.io/2017/02/07/rsync/index.html">
+<meta property="og:site_name" content="Sound">
+<meta property="og:description" content="为何要用这个？
+sersync是基于Inotify开发的，类似于Inotify-tools的工具
+sersync可以记录下被监听目录中发生变化的（包括增加、删除、修改）具体某一个文件或某一个目录的名字，然后使用rsync同步的时候，只同步发生变化的这个文件或者这个目录。
+rsync在同步的时候，只同步发生变化的这个文件或者这个目录（每次发生变化的数据相对整个同步目录数据来说是很小的，rsync在遍">
+<meta property="og:updated_time" content="2017-02-13T14:33:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="rsync">
+<meta name="twitter:description" content="为何要用这个？
+sersync是基于Inotify开发的，类似于Inotify-tools的工具
+sersync可以记录下被监听目录中发生变化的（包括增加、删除、修改）具体某一个文件或某一个目录的名字，然后使用rsync同步的时候，只同步发生变化的这个文件或者这个目录。
+rsync在同步的时候，只同步发生变化的这个文件或者这个目录（每次发生变化的数据相对整个同步目录数据来说是很小的，rsync在遍">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="Sound" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/back.jpg">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>rsync | Sound</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/back.jpg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Sound</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="/yongqiang_yao@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/yqyao" title="GitHub"></a>
+                            
+                                <a class="fa 知乎" href="/zhihu" title="知乎"></a>
+                            
+                                <a class="fa 网易云音乐" href="/netease" title="网易云音乐"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cv2/">cv2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cython/">cython</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/libcurl/">libcurl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sersync同步配置/">sersync同步配置</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">爱家人，爱生活</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Sound</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/back.jpg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Sound</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="/yongqiang_yao@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/yqyao" title="GitHub"></a>
+                            
+                                <a class="fa 知乎" target="_blank" href="/zhihu" title="知乎"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="/netease" title="网易云音乐"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-rsync" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/02/07/rsync/" class="article-date">
+      <time datetime="2017-02-07T05:23:50.000Z" itemprop="datePublished">2017-02-07</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      rsync
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Linux配置/">Linux配置</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sersync同步配置/">sersync同步配置</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="为何要用这个？"><a href="#为何要用这个？" class="headerlink" title="为何要用这个？"></a>为何要用这个？</h3><ul>
+<li>sersync是基于Inotify开发的，类似于Inotify-tools的工具</li>
+<li>sersync可以记录下被监听目录中发生变化的（包括增加、删除、修改）具体某一个文件或某一个目录的名字，然后使用rsync同步的时候，只同步发生变化的这个文件或者这个目录。</li>
+<li>rsync在同步的时候，只同步发生变化的这个文件或者这个目录（每次发生变化的数据相对整个同步目录数据来说是很小的，rsync在遍历查找比对文件时，速度很快），因此，效率很高。</li>
+</ul>
+<h3 id="测试机器"><a href="#测试机器" class="headerlink" title="测试机器"></a>测试机器</h3><ul>
+<li>机器 ip<br>10.0.2.123（内网地址）<br>10.0.2.124</li>
+<li>操作系统<br> centos7</li>
+<li>两台机器既为客户端也为服务端<a id="more"></a>
+</li>
+</ul>
+<h3 id="配置rsync"><a href="#配置rsync" class="headerlink" title="配置rsync"></a>配置rsync</h3><ol>
+<li><p>关闭SELINUX</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">vi /etc/selinux/config <span class="comment">#编辑防火墙配置文件</span></div><div class="line">SELINUX=enforcing <span class="comment">#注释掉</span></div><div class="line">SELINUXTYPE=targeted <span class="comment">#注释掉</span></div><div class="line">SELINUX=disabled <span class="comment">#增加</span></div><div class="line">:wq! <span class="comment">#保存，退出</span></div><div class="line">setenforce 0 <span class="comment">#立即生效</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>创建用户认证文件</p>
+<ul>
+<li>设置本机用户名与密码<br>  vi /etc/rsync.pas yyq:88888888</li>
+<li>设置远程服务器的密码<br>  vi /etc/rsync_server.pas 88888888</li>
+<li>修改文件属性<br>  chmod 600 /etc/rsync.pas<br>  chmod 600 /etc/rsync_server.pas</li>
+</ul>
+</li>
+<li>配置rsync<br>一般的centos 系统会 自带rsync，但是没有配置文件，我们修改配置文件。<br>vi /etc/rsyncd.conf #创建配置文件，添加以下代码<br>log file = /var/log/rsyncd.log #日志文件位置，启动rsync后自动产生这个文件，无需提前创建<br>pidfile = /var/run/rsyncd.pid  #pid文件的存放位置<br>lock file = /var/run/rsync.lock  #支持max connections参数的锁文件<br>secrets file = /etc/rsync.pass  #用户认证配置文件，里面保存用户名称和密码，后面会创建这个文件<br>uid = root #设置rsync运行权限为root<br>gid = root #设置rsync运行权限为root<br>use chroot = no #默认为true，修改为no，增加对目录文件软连接的备份<br>read only = no  #设置rsync服务端文件为读写权限<br>max connections = 200 #最大连接数<br>timeout = 600  #设置超时时间<br>[search] #自定义名称<br>path = /home/yyq/ #rsync服务端数据目录路径<br>auth users = yyq<br>hosts allow = 10.0.2.123 #允许进行数据同步的客户端IP地址，可以设置多个，用英文状态下逗号隔开<br>hosts deny = 10.0.2.125 # 禁止数据同步的客户端IP地址， 也可以设置多个</li>
+<li>启动rsync<br>  rsync –daemon –config=/etc/rsyncd.conf</li>
+</ol>
+<h3 id="安装sersync"><a href="#安装sersync" class="headerlink" title="安装sersync"></a>安装sersync</h3><ul>
+<li>目的： 实时触发同步</li>
+<li>下载sersync<br>  sersync 不需要编译，可直接使用其可执行文件。<br>  sersync下载地址：<a href="https://sersync.googlecode.com/files/sersync2.5.4_64bit_binary_stable_final.tar.gz" target="_blank" rel="external">https://sersync.googlecode.com/files/sersync2.5.4_64bit_binary_stable_final.tar.gz</a></li>
+<li><p>配置 confxml.xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">sersync</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">localpath</span> <span class="attr">watch</span>=<span class="string">"/opt/tongbu"</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">remote</span> <span class="attr">ip</span>=<span class="string">"10.0.2.123"</span> <span class="attr">name</span>=<span class="string">"search"</span>/&gt;</span></div><div class="line">            <span class="comment">&lt;!--&lt;remote ip="192.168.8.39" name="tongbu"/&gt;--&gt;</span></div><div class="line">            <span class="comment">&lt;!--&lt;remote ip="192.168.8.40" name="tongbu"/&gt;--&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">localpath</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">rsync</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">commonParams</span> <span class="attr">params</span>=<span class="string">"-artuz"</span>/&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">auth</span> <span class="attr">start</span>=<span class="string">"true"</span> <span class="attr">users</span>=<span class="string">"yyq"</span> <span class="attr">passwordfile</span>=<span class="string">"/etc/rsync_server.pas"</span>/&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">userDefinedPort</span> <span class="attr">start</span>=<span class="string">"false"</span> <span class="attr">port</span>=<span class="string">"874"</span>/&gt;</span><span class="comment">&lt;!-- port=874 --&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">timeout</span> <span class="attr">start</span>=<span class="string">"false"</span> <span class="attr">time</span>=<span class="string">"100"</span>/&gt;</span><span class="comment">&lt;!-- timeout=100 --&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">ssh</span> <span class="attr">start</span>=<span class="string">"false"</span>/&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">rsync</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">failLog</span> <span class="attr">path</span>=<span class="string">"/tmp/rsync_fail_log.sh"</span> <span class="attr">timeToExecute</span>=<span class="string">"60"</span>/&gt;</span><span class="comment">&lt;!--default every 60mins execute once--&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">crontab</span> <span class="attr">start</span>=<span class="string">"false"</span> <span class="attr">schedule</span>=<span class="string">"600"</span>&gt;</span><span class="comment">&lt;!--600mins--&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">crontabfilter</span> <span class="attr">start</span>=<span class="string">"false"</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">exclude</span> <span class="attr">expression</span>=<span class="string">"*.php"</span>&gt;</span><span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></div><div class="line">                <span class="tag">&lt;<span class="name">exclude</span> <span class="attr">expression</span>=<span class="string">"info/*"</span>&gt;</span><span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></div><div class="line">            <span class="tag">&lt;/<span class="name">crontabfilter</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">crontab</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">plugin</span> <span class="attr">start</span>=<span class="string">"false"</span> <span class="attr">name</span>=<span class="string">"command"</span>/&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">sersync</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>启动sersync<br>   sersync2 -d -r -o /home/yyq/sersync/confxml.xml</p>
+</li>
+<li>检查同步是否完成<br>  查看同步日志tail -f 100 /var/log/rsync.log</li>
+<li>设置sersync监控开机自动执行<br>  vi /etc/rc.d/rc.local  #编辑，在最后添加一行<br>  sersync2 -d -r -o /home/yyq/sersync/confxml.xml ＃设置开机自动运行脚本</li>
+</ul>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><ul>
+<li>用户认证文件是属于root，因此在运行sersync注意也需要用root去运行，否则会出现同步错误</li>
+<li>用户认证文件的文件属性是600</li>
+<li>本台机器是在10.0.2.124机器上配置的，在10.0.2.123上配置同这个一样，只需要把ip换成10.0.2.124即可</li>
+</ul>
+<h3 id="rsync-用法"><a href="#rsync-用法" class="headerlink" title="rsync 用法"></a>rsync 用法</h3><h4 id="常用格式"><a href="#常用格式" class="headerlink" title="常用格式"></a>常用格式</h4><ol>
+<li>rsync [OPTION]… SRC [SRC]… [USER@]HOST:DEST<br>将本地内容拷贝到远程机器上</li>
+<li>rsync [OPTION]… [USER@]HOST::SRC [DEST]<br>将远程机器的内容拷贝到本地</li>
+<li>rsync [OPTION]… SRC [SRC]… DEST<br>本地拷贝</li>
+<li>rsync [OPTION]… [USER@]HOST::SRC [DEST]<br>从远程rsync服务器中拷贝文件到本地机</li>
+<li>rsync [OPTION]… SRC [SRC]… [USER@]HOST::DEST<br>从本地机器拷贝文件到远程rsync服务器中</li>
+<li>rsync [OPTION]… rsync://[USER@]HOST[:PORT]/SRC [DEST]<br> 列远程机的文件列表</li>
+</ol>
+<h4 id="常用参数"><a href="#常用参数" class="headerlink" title="常用参数"></a>常用参数</h4><ul>
+<li>-r 表示递归 ；-l 是链接文件，意思是拷贝链接文件；-p 表示保持文件原有权限；</li>
+<li>-t 保持文件原有时间；-g 保持文件原有用户组；-o 保持文件原有属主；</li>
+<li>-z 传输时压缩；-P 传输进度；-e ssh的参数建立起加密的连接</li>
+<li>-u只进行更新，防止本地新文件被重写，注意两者机器的时钟的同时</li>
+<li>-v 传输时的进度等信息；</li>
+<li>–progress是指显示出详细的进度情况</li>
+<li>–delete是指如果服务器端删除了这一文件，那么客户端也相应把文件删除，保持真正的一致</li>
+<li>–password-file=/password/path/file来指定密码文件</li>
+<li>–exclude=PATTERN 指定排除不需要传输的文件模式</li>
+<li>–include=PATTERN 指定不排除而需要传输的文件模式</li>
+<li>–exclude-from=FILE 排除FILE中指定模式的文件</li>
+<li>–include-from=FILE 不排除FILE指定模式匹配的文件 </li>
+<li>–config=FILE 指定其他的配置文件，不使用默认的rsyncd.conf文件</li>
+<li>–ignore-errors 即使出现IO错误也进行删除 </li>
+<li>–existing 仅仅更新那些已经存在于DST的文件，而不备份那些新创建的文件</li>
+<li>–delete-excluded 同样删除接收端那些被该选项指定排除的文件</li>
+<li>–delete-after 传输结束以后再删除</li>
+</ul>
+
+      
+    </div>
+    
+  </div>
+  
+    
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/02/13/struct/">
+                    struct
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/02/03/cython-document2/">
+                    cython-document2
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#为何要用这个？"><span class="toc-number">1.</span> <span class="toc-text">为何要用这个？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试机器"><span class="toc-number">2.</span> <span class="toc-text">测试机器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置rsync"><span class="toc-number">3.</span> <span class="toc-text">配置rsync</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装sersync"><span class="toc-number">4.</span> <span class="toc-text">安装sersync</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注意事项"><span class="toc-number">5.</span> <span class="toc-text">注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rsync-用法"><span class="toc-number">6.</span> <span class="toc-text">rsync 用法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#常用格式"><span class="toc-number">6.1.</span> <span class="toc-text">常用格式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#常用参数"><span class="toc-number">6.2.</span> <span class="toc-text">常用参数</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"rsync　| Sound　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/02/13/struct/" title="上一篇: struct">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/02/03/cython-document2/" title="下一篇: cython-document2">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/10/23/dataset2voc/">各种数据集到Voc格式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/09/serialize/">Java Serialization</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/libcurl_use/">libcurl 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/30/zk_use/">zookeeper_use</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/30/Jersey/">Jersey_use</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/26/mysql++/">Mysql++ 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/zookeeper/">zookeeper</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/21/mysql/">mysql</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/21/python-class/">python_class</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/dlfcn/">dlfcn</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/03/git/">Git 使用笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/13/cython-FILE/">cython_FILE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/13/struct/">struct</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/07/rsync/">rsync</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/03/cython-document2/">cython-document2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/03/cython-document1/">cython-document1</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/07/ffmpeg/">ffmpeg 从视频中截取图像帧</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/07/cv2-python/">cv2_python</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/17/supervisord/">supervisord</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/17/cython/">cython 基础详解</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 Sound
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+    <script src="/js/GithubRepoWidget.js"></script>
+
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+             github: ".github-widget a", 
+            
+            
+            
+            
+             articleNav: "#article-nav a, #post-nav-button a", 
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
