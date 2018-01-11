@@ -521,77 +521,6 @@
 
 
   
-    <article id="post-python-class" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/03/21/python-class/" class="article-date">
-      <time datetime="2017-03-21T12:29:23.000Z" itemprop="datePublished">2017-03-21</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/21/python-class/">python_class</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h1 id="特殊方法定制类"><a href="#特殊方法定制类" class="headerlink" title="特殊方法定制类"></a>特殊方法定制类</h1><p>python中的容器如list，dict，set理论上都是线程不安全的。在一般的情况下由于GIL的存在，我们很少会考虑到线程安全的问题，但是对于多线程来说，可能会出现意想不到的事情。在某次项目中，我使用了字典作为一个缓冲区，需要不断的删改，这就导致了多线程调用时异常。因此一个线程安全的缓冲区就十分有必要了。</p>
-<p>由于我们需要的仅仅只是一个缓冲区，我们可以自己定制一个线程安全的类。借助threading 中的Lock模块来实现线程安全。</p>
-<h2 id="定制特定类"><a href="#定制特定类" class="headerlink" title="定制特定类"></a>定制特定类</h2><p>对于python类， 有很多内置的方法可以使用比如。我们常见的比如构造方法<strong>init</strong>(self),析构方法<strong>del</strong>(self),除了这个我们还有其他的方法。</p>
-<ul>
-<li>模拟字典<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">__hash__(self) <span class="comment"># hash 函数值</span></div><div class="line">__len__(self) <span class="comment"># mapping 中项的数目</span></div><div class="line">__getitem__(self, key) <span class="comment"># 得到给定key的值</span></div><div class="line">__setitem__(self, key, val) <span class="comment"># 设定给定键的值</span></div><div class="line">__delitem__(self, key) <span class="comment"># 删除给定键</span></div><div class="line">__iter__(self) <span class="comment"># 创建迭代类</span></div><div class="line">__contains__(self, key) <span class="comment"># 判断key是否在字典中</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>实际使用方法可以和字典一样，直接用[]符号访问即可<br>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/03/21/python-class/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
     <article id="post-multiprocess" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -649,6 +578,77 @@
       
         <p class="article-more-link">
           <a href="/2017/03/21/multiprocess/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-python-class" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/03/21/python-class/" class="article-date">
+      <time datetime="2017-03-21T12:29:23.000Z" itemprop="datePublished">2017-03-21</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/21/python-class/">python_class</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h1 id="特殊方法定制类"><a href="#特殊方法定制类" class="headerlink" title="特殊方法定制类"></a>特殊方法定制类</h1><p>python中的容器如list，dict，set理论上都是线程不安全的。在一般的情况下由于GIL的存在，我们很少会考虑到线程安全的问题，但是对于多线程来说，可能会出现意想不到的事情。在某次项目中，我使用了字典作为一个缓冲区，需要不断的删改，这就导致了多线程调用时异常。因此一个线程安全的缓冲区就十分有必要了。</p>
+<p>由于我们需要的仅仅只是一个缓冲区，我们可以自己定制一个线程安全的类。借助threading 中的Lock模块来实现线程安全。</p>
+<h2 id="定制特定类"><a href="#定制特定类" class="headerlink" title="定制特定类"></a>定制特定类</h2><p>对于python类， 有很多内置的方法可以使用比如。我们常见的比如构造方法<strong>init</strong>(self),析构方法<strong>del</strong>(self),除了这个我们还有其他的方法。</p>
+<ul>
+<li>模拟字典<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">__hash__(self) <span class="comment"># hash 函数值</span></div><div class="line">__len__(self) <span class="comment"># mapping 中项的数目</span></div><div class="line">__getitem__(self, key) <span class="comment"># 得到给定key的值</span></div><div class="line">__setitem__(self, key, val) <span class="comment"># 设定给定键的值</span></div><div class="line">__delitem__(self, key) <span class="comment"># 删除给定键</span></div><div class="line">__iter__(self) <span class="comment"># 创建迭代类</span></div><div class="line">__contains__(self, key) <span class="comment"># 判断key是否在字典中</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>实际使用方法可以和字典一样，直接用[]符号访问即可<br>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/03/21/python-class/#more">阅读全文 >></a>
         </p>
       
       <div class="clearfix"></div>
