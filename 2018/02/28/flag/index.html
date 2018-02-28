@@ -15,15 +15,19 @@
 
 
 
-<meta name="description" content="爱家人，爱生活">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Sound">
-<meta property="og:url" content="http://yqyao.github.io/categories/个人学习/index.html">
+<meta name="description" content="SSD 训练自己的数据集因为项目需要，需要检测一些不在公开数据集中的物体，比如旗帜，横幅。这些在VOC以及COCO，Imagenet中都没有对应的类别，因此我们需要自己整理数据，标注数据。SSD作为一个快速的检测框架，非常适合实际使用，因为之前已经有使用SSD框架的行人检测，对应的SDK已经其他一些API调用工具都已经编写完成。
+数据准备旗帜数据非常多，目前的搜索引擎有好几个，因此需要从不同的引擎">
+<meta property="og:type" content="article">
+<meta property="og:title" content="flag">
+<meta property="og:url" content="http://yqyao.github.io/2018/02/28/flag/index.html">
 <meta property="og:site_name" content="Sound">
-<meta property="og:description" content="爱家人，爱生活">
+<meta property="og:description" content="SSD 训练自己的数据集因为项目需要，需要检测一些不在公开数据集中的物体，比如旗帜，横幅。这些在VOC以及COCO，Imagenet中都没有对应的类别，因此我们需要自己整理数据，标注数据。SSD作为一个快速的检测框架，非常适合实际使用，因为之前已经有使用SSD框架的行人检测，对应的SDK已经其他一些API调用工具都已经编写完成。
+数据准备旗帜数据非常多，目前的搜索引擎有好几个，因此需要从不同的引擎">
+<meta property="og:updated_time" content="2018-02-28T09:22:09.657Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Sound">
-<meta name="twitter:description" content="爱家人，爱生活">
+<meta name="twitter:title" content="flag">
+<meta name="twitter:description" content="SSD 训练自己的数据集因为项目需要，需要检测一些不在公开数据集中的物体，比如旗帜，横幅。这些在VOC以及COCO，Imagenet中都没有对应的类别，因此我们需要自己整理数据，标注数据。SSD作为一个快速的检测框架，非常适合实际使用，因为之前已经有使用SSD框架的行人检测，对应的SDK已经其他一些API调用工具都已经编写完成。
+数据准备旗帜数据非常多，目前的搜索引擎有好几个，因此需要从不同的引擎">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -55,7 +59,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>Category: 个人学习 | Sound</title>
+<title>flag | Sound</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -65,10 +69,10 @@
         fancybox: true,
         animate: true,
         isHome: false,
-        isPost: false,
+        isPost: true,
         isArchive: false,
         isTag: false,
-        isCategory: true,
+        isCategory: false,
         fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
         scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
         search: true
@@ -268,222 +272,170 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-flag" class="article article-type-post" itemscope itemprop="blogPost">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-          <div class="article-meta">
-              <a href="/2018/02/28/flag/" class="archive-article-date">
-      <time datetime="2018-02-28T03:13:17.000Z" itemprop="datePublished">02-28</time>
+    <div class="article-meta">
+      <a href="/2018/02/28/flag/" class="article-date">
+      <time datetime="2018-02-28T03:13:17.000Z" itemprop="datePublished">2018-02-28</time>
 </a>
 
 
-        </div>
-         
+    </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/02/28/flag/">flag</a>
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      flag
     </h1>
   
 
-        <div class="article-info info-on-archive">
-          
+      </header>
+      
+      <div class="article-info article-info-post">
+        
     <div class="article-category tagcloud">
     <a class="article-category-link" href="/categories/个人学习/">个人学习</a>
     </div>
 
 
-          
+        
     <div class="article-tag tagcloud">
         <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DL/">DL</a></li></ul>
     </div>
 
-        </div>
         <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
+      </div>
       
-        </div></section>
+    
+    <div class="article-entry" itemprop="articleBody">
       
+          
+        <h1 id="SSD-训练自己的数据集"><a href="#SSD-训练自己的数据集" class="headerlink" title="SSD 训练自己的数据集"></a>SSD 训练自己的数据集</h1><p>因为项目需要，需要检测一些不在公开数据集中的物体，比如旗帜，横幅。这些在VOC以及COCO，Imagenet中都没有对应的类别，因此我们需要自己整理数据，标注数据。SSD作为一个快速的检测框架，非常适合实际使用，因为之前已经有使用SSD框架的行人检测，对应的SDK已经其他一些API调用工具都已经编写完成。</p>
+<h2 id="数据准备"><a href="#数据准备" class="headerlink" title="数据准备"></a>数据准备</h2><p>旗帜数据非常多，目前的搜索引擎有好几个，因此需要从不同的引擎上去搜取图片，需要注意的是，需要下载原图，有些引擎可能稍不注意下载的都是缩略图，尺寸非常小，不适合训练。标注工具使用Labelimg <a href="https://github.com/tzutalin/labelImg" target="_blank" rel="external">https://github.com/tzutalin/labelImg</a> ,自动生成xml格式的label，非常好用。网上对应的资料非常多，非常好用的一个工具，只是暂时不支持mac，这个是个缺点。</p>
+<h3 id="网络结构设计"><a href="#网络结构设计" class="headerlink" title="网络结构设计"></a>网络结构设计</h3><p>因为实际使用时不需要检测太小的旗帜，因此网络可以稍微小一点，同时可以对原始的网络结构进行一些修改方便输入不同尺寸的图片。这次使用的网络结构是resnet18，相比vgg，计算量已经小了很多，运算速度也还算是比较快，在显卡为 GTX 1080 Ti, 输入300x300可以达到80fps，这个实际使用完全够用。</p>
+<p>github 地址为：<a href="https://github.com/yqyao/flag" target="_blank" rel="external">https://github.com/yqyao/flag</a></p>
+<a id="more"></a>
+<h3 id="遇到的坑"><a href="#遇到的坑" class="headerlink" title="遇到的坑"></a>遇到的坑</h3><p><strong>Check failed:std::equal(top_shape.begin() + 1, top_shape.begin() + 4, shape.begin() + 1)</strong></p>
+<p>or</p>
+<p><strong>OpenCV Error: Assertion failed ((scn == 3 || scn == 4) &amp;&amp; (depth == CV_8U || depth == CV_32F)) in cvtColor</strong></p>
+<p>这个错误的原因有多个：</p>
+<ul>
+<li>训练图像通道不为3，搜集的图片可能包含灰度图，以及4通道的图片</li>
+<li>训练图像最小边过小，比如小于300</li>
+</ul>
+<p><strong>注意python的cv2模块与c++直接调用C++是有区别的</strong></p>
+<p>python 的cv2 是无法识别灰度以及4通道图片的，以默认的方式读图片都会以3通道的方式读取，如果事先不知道图片是否是灰度图是无法通过python cv2直接判断出图片是不是灰度图或者4通道图片，而caffe中C++是直接可以读出来的。</p>
+<p>对于灰度图python 可以通过非常暴力的判断rgb3个通道是不是相同去判断是不是灰度图，而4通道图就比较麻烦，我没有去找图片，而是更加暴力去重新读取图片，然后使用python cv2去写入图片保证最后的图片都是3通道。</p>
+<p><strong>另一种解决办法</strong></p>
+<p>将P.Resize.warp 改为 P.Resize.FIT_SMALL_SIZE，但是这种方式就没办法批量训练，batch size只能设置为1。实际上不是一个非常好的训练方式。</p>
+
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
+    </div>
     
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-          <div class="article-meta">
-              <a href="/2017/10/23/dataset2voc/" class="archive-article-date">
-      <time datetime="2017-10-23T14:00:39.000Z" itemprop="datePublished">10-23</time>
-</a>
-
-
-        </div>
-         
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/10/23/dataset2voc/">各种数据集到Voc格式</a>
-    </h1>
-  
-
-        <div class="article-info info-on-archive">
-          
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/个人学习/">个人学习</a>
-    </div>
-
-
-          
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
-    </div>
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
   </div>
-</article>
   
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-          <div class="article-meta">
-              <a href="/2017/09/09/serialize/" class="archive-article-date">
-      <time datetime="2017-09-09T09:13:17.000Z" itemprop="datePublished">09-09</time>
-</a>
 
 
-        </div>
-         
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/09/09/serialize/">Java Serialization</a>
-    </h1>
-  
-
-        <div class="article-info info-on-archive">
-          
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/个人学习/">个人学习</a>
-    </div>
-
-
-          
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-          <div class="article-meta">
-              <a href="/2017/07/30/Jersey/" class="archive-article-date">
-      <time datetime="2017-07-30T03:13:17.000Z" itemprop="datePublished">07-30</time>
-</a>
-
-
-        </div>
-         
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/30/Jersey/">Jersey_use</a>
-    </h1>
-  
-
-        <div class="article-info info-on-archive">
-          
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/个人学习/">个人学习</a>
-    </div>
-
-
-          
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-          <div class="article-meta">
-              <a href="/2017/07/30/zk_use/" class="archive-article-date">
-      <time datetime="2017-07-30T03:13:17.000Z" itemprop="datePublished">07-30</time>
-</a>
-
-
-        </div>
-         
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/30/zk_use/">zookeeper_use</a>
-    </h1>
-  
-
-        <div class="article-info info-on-archive">
-          
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/个人学习/">个人学习</a>
-    </div>
-
-
-          
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
-    </div>
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/categories/个人学习/page/2/">2</a><a class="extend next" rel="next" href="/categories/个人学习/page/2/">Next &raquo;</a>
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/10/23/dataset2voc/">
+                    各种数据集到Voc格式
+                </a>
+            </div>
+        
     </nav>
-  
 
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SSD-训练自己的数据集"><span class="toc-number">1.</span> <span class="toc-text">SSD 训练自己的数据集</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据准备"><span class="toc-number">1.1.</span> <span class="toc-text">数据准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#网络结构设计"><span class="toc-number">1.1.1.</span> <span class="toc-text">网络结构设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#遇到的坑"><span class="toc-number">1.1.2.</span> <span class="toc-text">遇到的坑</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"flag　| Sound　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/10/23/dataset2voc/" title="下一篇: 各种数据集到Voc格式">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/02/28/flag/">flag</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/23/dataset2voc/">各种数据集到Voc格式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/09/serialize/">Java Serialization</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/04/libcurl_use/">libcurl 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/30/zk_use/">zookeeper_use</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/30/Jersey/">Jersey_use</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/26/mysql++/">Mysql++ 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/01/zookeeper/">zookeeper</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/21/mysql/">mysql</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/21/python-class/">python_class</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/21/multiprocess/">python multiprocessing</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/dlfcn/">dlfcn</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/03/git/">Git 使用笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/13/cython-FILE/">cython_FILE</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/13/struct/">struct</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/07/rsync/">rsync</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/03/cython-document2/">cython-document2</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/03/cython-document1/">cython-document1</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/07/ffmpeg/">ffmpeg 从视频中截取图像帧</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/07/cv2-python/">cv2_python</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/17/supervisord/">supervisord</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/12/17/cython/">cython 基础详解</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
 </div>
       <footer id="footer">
     <div class="outer">

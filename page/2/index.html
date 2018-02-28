@@ -196,7 +196,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cv2/">cv2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cython/">cython</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/libcurl/">libcurl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sersync同步配置/">sersync同步配置</a></li></ul>
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DL/">DL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cv2/">cv2</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cython/">cython</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ffmpeg/">ffmpeg</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/libcurl/">libcurl</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sersync同步配置/">sersync同步配置</a></li></ul>
                     </div>
                 </section>
                 
@@ -274,6 +274,92 @@
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
       <div class="body-wrap">
+  
+    <article id="post-Jersey" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/07/30/Jersey/" class="article-date">
+      <time datetime="2017-07-30T03:13:17.000Z" itemprop="datePublished">2017-07-30</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/30/Jersey/">Jersey_use</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h1 id="Jersey-Restful框架使用"><a href="#Jersey-Restful框架使用" class="headerlink" title="Jersey Restful框架使用"></a>Jersey Restful框架使用</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>由于之前使用python 的Tornado这个web 框架，了解到了一些有关Restful API知识，但是python这个语言在web 开发中不是太擅长。而Java 在web开发中则用的比较多，因此在查阅了一系列资料之后，发现Jersey这个轻量级的Restful API框架，配合Tomcat可以构成简单的Web开发。趁着放假，找了一些资料进行了简单的学习。可能以后会用到，因此想记录下来学习过程。以后重新拾起的时候希望会快速入门。</p>
+</blockquote>
+<h2 id="Jersey-介绍"><a href="#Jersey-介绍" class="headerlink" title="Jersey 介绍"></a>Jersey 介绍</h2><blockquote>
+<p>Jersey RESTful 框架是开源的RESTful框架, 实现了JAX-RS (JSR 311 &amp; JSR 339) 规范。它扩展了JAX-RS 参考实现， 提供了更多的特性和工具， 可以进一步地简化 RESTful service 和 client 开发。尽管相对年轻，它已经是一个产品级的 RESTful service 和 client 框架。对于轻量级应用来说，这个是非常好的选择。</p>
+</blockquote>
+<h2 id="配置版本"><a href="#配置版本" class="headerlink" title="配置版本"></a>配置版本</h2><ul>
+<li>Jersey2.x</li>
+<li>Tomcat7.x</li>
+<li>maven3.5.0</li>
+<li>java8</li>
+<li>eclipse</li>
+</ul>
+<h2 id="实际使用"><a href="#实际使用" class="headerlink" title="实际使用"></a>实际使用</h2><h3 id="基础配置"><a href="#基础配置" class="headerlink" title="基础配置"></a>基础配置</h3><ul>
+<li>maven Web工程建立和Tomcat 配置<blockquote>
+<p>本文就不介绍了，这个可以百度，教程也很多。</p>
+</blockquote>
+</li>
+</ul>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/个人学习/">个人学习</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/07/30/Jersey/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-mysql++" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -503,81 +589,6 @@
       
         <p class="article-more-link">
           <a href="/2017/03/21/mysql/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-multiprocess" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/03/21/multiprocess/" class="article-date">
-      <time datetime="2017-03-21T12:29:23.000Z" itemprop="datePublished">2017-03-21</time>
-</a>
-
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/21/multiprocess/">python multiprocessing</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h1 id="python多线程学习"><a href="#python多线程学习" class="headerlink" title="python多线程学习"></a>python多线程学习</h1><h2 id="multiprocessing"><a href="#multiprocessing" class="headerlink" title="multiprocessing"></a>multiprocessing</h2><p>这个是python 标准库中自带的，用起来也很方便<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> multiprocessing.dummy <span class="keyword">import</span> Pool <span class="comment"># 这个是多线程</span></div><div class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Pool <span class="comment"># 这个是多进程</span></div></pre></td></tr></table></figure></p>
-<ul>
-<li>用法实例<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> multiprocessing.dummy <span class="keyword">import</span> Pool <span class="keyword">as</span> ThreadPool <span class="comment"># 这个是多线程</span></div><div class="line">path_list = list()</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="number">10</span>):</div><div class="line">    path_list.append(i)</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(path)</span>:</span></div><div class="line">    <span class="keyword">print</span> path</div><div class="line">pool = ThreadPool(processes=<span class="number">1</span>)</div><div class="line">pool.map(test, path_list)</div><div class="line">pool.close()</div><div class="line">pool.join()</div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="futures"><a href="#futures" class="headerlink" title="futures"></a>futures</h2><ul>
-<li>background<br>Python标准库为我们提供了threading和multiprocessing模块编写相应的多线程/多进程代码，但是当项目达到一定的规模，频繁创建/销毁进程或者线程是非常消耗资源的，这个时候我们就要编写自己的线程池/进程池，以空间换时间。但从Python3.2开始，标准库为我们提供了<code>concurrent.futures</code>模块，它提供了ThreadPoolExecutor和ProcessPoolExecutor两个类，实现了对threading和multiprocessing的进一步抽象，对编写线程池/进程池提供了直接的支持。</li>
-</ul>
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/个人学习/">个人学习</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2017/03/21/multiprocess/#more">阅读全文 >></a>
         </p>
       
       <div class="clearfix"></div>
